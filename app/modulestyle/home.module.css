@@ -4,28 +4,47 @@
   justify-content: space-between;
   align-items: center;
   padding: 6rem;
-  min-height: 100vh;
+  max-height: 100vh;
 }
 
-.description {
-  display: inherit;
-  justify-content: inherit;
-  align-items: inherit;
-  font-size: 0.85rem;
-  max-width: var(--max-width);
-  width: 100%;
+.navbar {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  top: 0;
+
   z-index: 2;
-  font-family: var(--font-mono);
+  width: 80vw;
+  height: 10vh;
+
+  border-bottom: 2px solid rgb(231, 231, 231);
 }
 
-.description a {
+.navbar_buttons {
+  display: flex;
+  align-items: center;
+  margin-left: 50px;
+}
+
+.navbar button {
+  background: transparent;
+  border: 0;
+  margin-left: 20px;
+
+  font-family: 'Inter';
+  font-weight: 700;
+  font-size: 1.25rem;
+  transition: 100ms;
+}
+
+.navbar a {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
 }
 
-.description p {
+.navbar p {
   position: relative;
   margin: 0;
   padding: 1rem;
@@ -34,15 +53,38 @@
   border-radius: var(--border-radius);
 }
 
+.logo_container {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.logo_container img {
+  height: 5vh;
+  width: 5vh;
+  margin: 10px;
+  border: 0;
+  outline: none;
+  background-image: url('../favicon.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
 .code {
   font-weight: 700;
   font-family: var(--font-mono);
 }
 
+.highlighted {
+  font-weight: 700;
+  font-family: var(--font-mono);
+  color: var(--primary);
+}
+
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(25%, auto));
-  max-width: 100%;
+  grid-template-columns: repeat(2, minmax(50%, auto));
+  max-width: 30%;
   width: var(--max-width);
 }
 
@@ -50,16 +92,18 @@
   padding: 1rem 1.2rem;
   border-radius: var(--border-radius);
   background: rgba(var(--card-rgb), 0);
-  border: 1px solid rgba(var(--card-border-rgb), 0);
+  border: 1px solid rgba(0, 0, 0, 0);
   transition: background 200ms, border 200ms;
 }
 
 .card span {
   display: inline-block;
+  visibility: hidden;
   transition: transform 200ms;
 }
 
 .card h2 {
+  margin: 0;
   font-weight: 600;
   margin-bottom: 0.7rem;
 }
@@ -75,9 +119,35 @@
 .center {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  flex-direction: row;
   position: relative;
   padding: 4rem 0;
+  max-width: 40%;
+}
+
+.center_header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.center img {
+  width: 400px;
+  height: 250px;
+  border-radius: 40px;
+  background-image: url('../images/salmon.jpg');
+  background-size: cover;
+}
+
+.center h1 {
+  font-size: 4rem;
+  margin: 0;
+  margin-left: 20px;
+}
+
+.center p {
+  margin-left: 20px;
 }
 
 .center::before {
@@ -107,21 +177,23 @@
 .logo {
   position: relative;
 }
+
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
-    background: rgba(var(--card-rgb), 0.1);
-    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+    background: rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.1);
   }
 
   .card:hover span {
+    visibility: visible;
     transform: translateX(4px);
   }
-}
 
-@media (prefers-reduced-motion) {
-  .card:hover span {
-    transform: none;
+  .navbar button:hover {
+
+    color: var(--primary);
+    cursor: pointer;
   }
 }
 
@@ -154,52 +226,6 @@
     transform: none;
     height: 300px;
   }
-
-  .description {
-    font-size: 0.8rem;
-  }
-
-  .description a {
-    padding: 1rem;
-  }
-
-  .description p,
-  .description div {
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    width: 100%;
-  }
-
-  .description p {
-    align-items: center;
-    inset: 0 0 auto;
-    padding: 2rem 1rem 1.4rem;
-    border-radius: 0;
-    border: none;
-    border-bottom: 1px solid rgba(var(--callout-border-rgb), 0.25);
-    background: linear-gradient(
-      to bottom,
-      rgba(var(--background-start-rgb), 1),
-      rgba(var(--callout-rgb), 0.5)
-    );
-    background-clip: padding-box;
-    backdrop-filter: blur(24px);
-  }
-
-  .description div {
-    align-items: flex-end;
-    pointer-events: none;
-    inset: auto 0 0;
-    padding: 2rem;
-    height: 200px;
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgb(var(--background-end-rgb)) 40%
-    );
-    z-index: 1;
-  }
 }
 
 /* Tablet and Smaller Desktop */
@@ -223,6 +249,7 @@
   from {
     transform: rotate(360deg);
   }
+
   to {
     transform: rotate(0deg);
   }
