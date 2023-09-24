@@ -5,6 +5,21 @@
   align-items: center;
   padding: 6rem;
   max-height: 100vh;
+  
+}
+
+.navbar_background {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  top: 0;
+
+  z-index: 1;
+  width: 100vw;
+  height: 10vh;
+
+  background-color: white;
+  border-bottom: 2px solid rgb(231, 231, 231);
 }
 
 .navbar {
@@ -16,8 +31,6 @@
   z-index: 2;
   width: 80vw;
   height: 10vh;
-
-  border-bottom: 2px solid rgb(231, 231, 231);
 }
 
 .login_container a {
@@ -61,8 +74,8 @@
 }
 
 .logo_container img {
-  height: 5vh;
-  width: 5vh;
+  height: 8vh;
+  width: 8vh;
   margin: 10px;
   border: 0;
   outline: none;
@@ -118,6 +131,17 @@
   max-width: 30ch;
 }
 
+.center_background {
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('../images/center-background.svg');
+  background-size: cover;
+  background-repeat: no-repeat; 
+  z-index: -1;
+}
+
 .center {
   display: flex;
   justify-content: center;
@@ -132,6 +156,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  background-color: white;
+  padding: 20px;
+  border-radius: 40px;
 }
 
 .center img {
