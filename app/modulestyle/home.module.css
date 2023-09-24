@@ -236,10 +236,12 @@
   .register:hover {
     color: white !important;
     filter: brightness(1.1);
+    cursor: pointer;
   }
 
   .login:hover {
     filter: brightness(0.9);
+    cursor: pointer;
   }
 }
 

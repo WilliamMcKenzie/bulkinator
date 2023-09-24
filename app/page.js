@@ -11,7 +11,7 @@ export default function Home() {
           BULKINATOR
         </h1>
         <div className={styles.navbar_buttons}>
-          <a href="./">
+          <a className={styles.highlighted} href="./">
             Home
           </a>
           <a href="./meals">

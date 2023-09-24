@@ -1,0 +1,257 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6rem;
+    max-height: 100vh;
+    overflow-y: hidden;
+}
+
+.meals_background {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #F9FAFB;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -2;
+}
+
+.meals_header_background {
+    position: absolute;
+    width: 100vw;
+    height: 40vh;
+
+    background: url('../images/meals-header-background.png');
+    background-size: cover;
+    background-position-y: -300px;
+    background-repeat: no-repeat;
+    z-index: -1;
+
+    filter: brightness(0.3);
+}
+
+.meals_header {
+    position: absolute;
+    right: 0;
+    top: 10vh;
+    width: 100vw;
+    height: 40vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.meals_header h1 {
+    color: white;
+    font-weight: 200;
+}
+
+.meals_input {
+    width: fit-content;
+    background-color: white;
+    padding: 2px;
+    border-radius: 20px;
+
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.meals_input input {
+    outline: none;
+    border: none;
+    border-radius: 20px;
+    border: 2px solid transparent;
+
+    font-family: 'Inter';
+    font-size: 1rem;
+    padding: 5px;
+    margin-left: 5px;
+    margin-right: 10px;
+    width: 20vw;
+    height: 30px;
+
+    transition: 0.3s;
+}
+
+.searchIcon {
+    color: white;
+    background-color: var(--primary);
+    padding: 15px;
+    border-radius: 20px;
+    border: 2px solid var(--primary);
+    height: 30px;
+
+    transition: 0.3s;
+}
+
+.heartIcon {
+    color: var(--primary);
+    background-color: white;
+    padding: 15px;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    margin-left: 5px;
+
+    transition: 0.3s;
+}
+
+.highlighted {
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--primary);
+}
+
+.navbar_background {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+
+    z-index: 1;
+    width: 100vw;
+    height: 10vh;
+
+    background-color: white;
+    border-bottom: 1px solid rgb(231, 231, 231);
+}
+
+.navbar {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+
+    z-index: 2;
+    width: 80vw;
+    height: 10vh;
+}
+
+.auth_container {
+    margin-left: auto;
+}
+
+.auth_container a {
+    border-radius: 40px;
+    padding: 15px;
+}
+
+.login {
+    color: var(--primary);
+    background-color: white !important;
+}
+
+.register {
+    color: white;
+    background-color: var(--primary) !important;
+    margin-left: 2px !important;
+}
+
+.navbar_buttons {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.navbar a {
+    background: transparent;
+    border: 0;
+    margin-left: 20px;
+
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 1rem;
+    transition: 100ms;
+}
+
+.logo_container {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.logo_container img {
+    height: 8vh;
+    width: 8vh;
+    margin: 10px;
+    border: 0;
+    outline: none;
+    background-image: url('../favicon.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    top: 10vh;
+    width: 10vw;
+    height: 90vh;
+    background-color: white;
+
+    z-index: 0;
+}
+
+.sidebar button {
+    background-color: white;
+    border: 0;
+    padding: 15px;
+    font-family: 'Inter';
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgb(44, 44, 44);
+}
+
+.faIcon {
+    width: 30px;
+    height: 30px;
+    color: rgb(44, 44, 44);
+
+    position: absolute;
+    left: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .navbar a:hover {
+        color: var(--primary);
+        cursor: pointer;
+    }
+
+    .register:hover {
+        color: white !important;
+        filter: brightness(1.1);
+        cursor: pointer;
+    }
+
+    .login:hover {
+        filter: brightness(0.9);
+        cursor: pointer;
+    }
+
+    .meals_input input:focus {
+        border: 2px solid var(--primary);
+    }
+
+    .searchIcon:hover {
+        background-color: white;
+        color: var(--primary);
+        cursor: pointer;
+    }
+
+    .heartIcon:hover {
+        border: 2px solid var(--primary);
+        cursor: pointer;
+    }
+}
