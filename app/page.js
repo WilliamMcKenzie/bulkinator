@@ -21,7 +21,7 @@ export default function Home() {
             Excercises
           </a>
         </div>
-        <div className={styles.login_container}>
+        <div className={styles.auth_container}>
           <a className={styles.login} href="./login">
             Login
           </a>
@@ -73,3 +73,4 @@ export default function Home() {
     </main >
   )
 }
+

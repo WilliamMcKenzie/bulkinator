@@ -1,0 +1,201 @@
+
+
+.main {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(50%, auto));
+    min-width: 500px;
+    max-height: 100vh;
+    overflow-y: hidden;
+    margin-top: 10vh;
+  }
+  
+  .navbar_background {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+  
+    z-index: 1;
+    width: 100vw;
+    height: 10vh;
+  
+    background-color: white;
+    border-bottom: 2px solid rgb(231, 231, 231);
+  }
+  
+  .navbar {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+  
+    z-index: 2;
+    width: 80vw;
+    height: 10vh;
+  }
+  
+  .navbar a {
+    background: transparent;
+    border: 0;
+    margin-left: 20px;
+  
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 2rem;
+    transition: 100ms;
+  }
+  
+  .logo_container {
+    display: flex;
+    align-items: center;
+    margin: 0;
+  }
+  
+  .logo_container img {
+    height: 8vh;
+    width: 8vh;
+    margin: 10px;
+    border: 0;
+    outline: none;
+    background-image: url('../favicon.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  
+  .center_background {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../images/center-background.svg');
+    background-size: cover;
+    background-repeat: no-repeat; 
+    z-index: -1;
+  }
+
+  .auth_background {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('../images/auth-background.svg');
+    background-size: cover;
+    background-repeat: no-repeat; 
+    z-index: -1;
+  }
+
+  .auth {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 5vh;
+  }
+
+  .login_container {
+    display: flex;
+    flex-direction: column;
+    width: 30vw;
+  }
+
+  .login_container label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+  }
+
+  .login_container input {
+    outline: none;
+    border: 2px solid rgb(231, 231, 231);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+
+    font-family: 'Inter';
+    transition: 0.25s;
+  }
+
+  .login_container button {
+    background-color: var(--primary);
+    color: white;
+    border : 0;
+    border-radius: 10px;
+
+    padding: 15px;
+    font-family: 'Inter';
+    font-size: 1rem;
+  }
+
+  .oauth_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 30vw;
+    margin-bottom: 5vh;
+  }
+
+  .oauth_container h1 {
+    margin-bottom: 5vh;
+  }
+
+  .oauth_container button {
+    width: 100%;
+    margin-bottom: 20px;
+
+    background: white;
+    border: 2px solid rgb(231, 231, 231);
+    border-radius: 10px;
+
+    padding: 10px;
+    font-family: 'Inter';
+    font-size: 1rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .apple img {
+    position: absolute;
+    left: 10px;
+    background-image: url('../images/apple-logo.svg');
+    background-size: cover;
+    height: 30px;
+    width: 30px;
+  }
+
+  .google img {
+    position: absolute;
+    left: 10px;
+    background-image: url('../images/google-logo.svg');
+    background-size: cover;
+    height: 30px;
+    width: 30px;
+  }
+  
+  /* Enable hover only on non-touch devices */
+  @media (hover: hover) and (pointer: fine) {
+  
+    .navbar a:hover {
+        filter: brightness(1.2);
+      cursor: pointer;
+    }
+
+    .login_container input:focus {
+      border: 2px solid var(--primary);
+    }
+
+    .login_container button:hover {
+      filter: brightness(1.1);
+      cursor: pointer;
+    }
+
+    .oauth_container button:hover {
+      filter: brightness(0.95);
+      cursor: pointer;
+    }
+  }
+  
+  /* Mobile */
+  @media (max-width: 700px) {
+  }

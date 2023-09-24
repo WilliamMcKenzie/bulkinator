@@ -5,7 +5,7 @@
   align-items: center;
   padding: 6rem;
   max-height: 100vh;
-  
+  overflow-y: hidden;
 }
 
 .navbar_background {
@@ -19,7 +19,7 @@
   height: 10vh;
 
   background-color: white;
-  border-bottom: 2px solid rgb(231, 231, 231);
+  border-bottom: 1px solid rgb(231, 231, 231);
 }
 
 .navbar {
@@ -33,7 +33,7 @@
   height: 10vh;
 }
 
-.login_container a {
+.auth_container a {
   border-radius: 40px;
   padding: 15px;
 }
@@ -156,7 +156,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.5);
   padding: 20px;
   border-radius: 40px;
 }
