@@ -10,26 +10,27 @@ export default function Home() {
           BULKINATOR
         </h1>
         <div className={styles.navbar_buttons}>
-          <a
-            href="./excercises"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          />
-          <button>
+          <a href="./">
             Home
-          </button>
-          <button>
+          </a>
+          <a href="./meals">
             Meals
-          </button>
-          <button>
+          </a>
+          <a href="./exercises">
             Excercises
-          </button>
+          </a>
+        </div>
+        <div className={styles.login_container}>
+          <a className={styles.login} href="./login">
+            Login
+          </a>
+          <a className={styles.register} href="./register">
+            Register
+          </a>
         </div>
       </div>
 
       <div className={styles.center}>
-        <img></img>
         <div className={styles.center_header}>
           <h1>
             Eat massive
@@ -40,6 +41,7 @@ export default function Home() {
             Bulkinator is a workout and meal planner designed to optimize muscle growth on the bulk, sign up now to get huge in no time.
           </p>
         </div>
+        <img></img>
       </div>
 
       <div className={styles.grid}>
