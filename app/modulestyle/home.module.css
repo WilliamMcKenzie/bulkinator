@@ -33,6 +33,10 @@
   height: 10vh;
 }
 
+.auth_container {
+  margin-left: auto;
+}
+
 .auth_container a {
   border-radius: 40px;
   padding: 15px;
@@ -40,13 +44,13 @@
 
 .login {
   color: var(--primary);
-  background-color: white!important;
+  background-color: white !important;
 }
 
 .register {
   color: white;
-  background-color: var(--primary)!important;
-  margin-left: 2px!important;
+  background-color: var(--primary) !important;
+  margin-left: 2px !important;
 }
 
 .navbar_buttons {
@@ -54,6 +58,9 @@
   align-items: center;
   margin-left: auto;
   margin-right: auto;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
 }
 
 .navbar a {
@@ -138,7 +145,7 @@
   height: 100vh;
   background-image: url('../images/center-background.svg');
   background-size: cover;
-  background-repeat: no-repeat; 
+  background-repeat: no-repeat;
   z-index: -1;
 }
 
@@ -227,9 +234,10 @@
   }
 
   .register:hover {
-    color: white!important;
+    color: white !important;
     filter: brightness(1.1);
   }
+
   .login:hover {
     filter: brightness(0.9);
   }
