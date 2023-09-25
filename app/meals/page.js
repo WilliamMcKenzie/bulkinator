@@ -10,6 +10,13 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
 
 export default function Home() {
+
+    const getMeal = async() => {
+        await fetch('/api/meals', {
+            method: "GET", 
+            body : JSON.stringify({input: `chicken`})
+        })
+    }
     return (
         <main className={styles.main}>
             <div className={styles.navbar_background}></div>

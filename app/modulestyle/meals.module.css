@@ -66,16 +66,14 @@
 .meals_input input {
     outline: none;
     border: none;
-    border-radius: 20px;
+    border-radius: 18px;
     border: 2px solid transparent;
 
     font-family: 'Inter';
     font-size: 1rem;
-    padding: 5px;
     padding-left: 10px;
-    margin-right: 5px;
     width: 20vw;
-    height: 35px;
+    height: 90%;
 
     transition: 0.3s;
 }
@@ -86,7 +84,7 @@
     padding: 15px;
     border-radius: 20px;
     border: 2px solid var(--primary);
-    height: 30px;
+    margin-left: 5px;
 
     transition: 0.3s;
 }
@@ -96,8 +94,8 @@
     background-color: white;
     padding: 15px;
     border-radius: 20px;
-    border: 2px solid transparent;
     margin-left: 5px;
+    border: 2px solid transparent;
 
     transition: 0.3s;
 }
@@ -247,6 +245,7 @@
     .searchIcon:hover {
         background-color: white;
         color: var(--primary);
+        border: 2px solid var(--primary);
         cursor: pointer;
     }
 
