@@ -1,0 +1,25 @@
+import axios from 'axios'
+import { NextResponse, type NextRequest } from 'next/server'
+
+export async function GET(request: NextRequest) {
+  const searchParams = request.nextUrl.searchParams
+  const input = searchParams.get('input')
+
+  const apiKey = '4487c73d45a1038e4bb07fbb970f535d';
+  const appId = '35545a91';
+
+  const queryParams = {
+    type: 'public',
+    q: input,
+    app_id: appId,
+    app_key: apiKey,
+    fields: 'label'
+  };
+
+  const response = await axios.get('https://api.edamam.com/api/recipes/v2', {
+    params: queryParams
+  });
+
+
+  return NextResponse.json(response.data)
+}

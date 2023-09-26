@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import styles from '../modulestyle/meals.module.css'
 import { config } from '@fortawesome/fontawesome-svg-core'
@@ -8,15 +9,29 @@ config.autoAddCss = false
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { faHeart } from '@fortawesome/free-solid-svg-icons'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+
+const fetcher = (url, data) => {
+    return axios.get(url, data).then(res => res.data);
+};
 
 export default function Home() {
 
-    const getMeal = async() => {
-        await fetch('/api/meals', {
-            method: "GET", 
-            body : JSON.stringify({input: `chicken`})
-        })
-    }
+    const [recipes, setRecipes] = useState([]);
+    const [recipeInput, setRecipeInput] = useState('');
+
+
+    useEffect(() => {
+
+        async function callProtein() {
+            const meals = await fetcher(`/api/meals?input=protein`, false)
+            setRecipes(meals.hits)
+        }
+        callProtein()
+        return () => { }
+    }, [])
+
     return (
         <main className={styles.main}>
             <div className={styles.navbar_background}></div>
@@ -51,10 +66,32 @@ export default function Home() {
                 <div className={styles.meals_header_background}></div>
                 <h1>Have a dish in mind?</h1>
                 <div className={styles.meals_input}>
-                    <input></input>
-                    <FontAwesomeIcon className={styles.searchIcon} icon={faSearch} />
+                    <input
+                        value={recipeInput}
+                        onChange={e => {
+                            setRecipeInput(e.currentTarget.value);
+                        }}>
+                    </input>
+                    <FontAwesomeIcon className={styles.searchIcon} icon={faSearch} onClick={async () => {
+                        const meals = await fetcher(`/api/meals?input=${recipeInput}`, false)
+                        console.log(meals.hits)
+                        setRecipes(meals.hits)
+                    }} />
                     <FontAwesomeIcon className={styles.heartIcon} icon={faHeart} />
                 </div>
+            </div>
+
+            <div className={styles.recipes_list}>
+                {recipes.map((recipe, index) => (
+                    <div key={index} className={styles.recipe_card}>
+                        <img src={recipe.recipe.image}></img>
+                        <div className={styles.recipe_card_info}>
+                            {recipe.recipe.label}
+                            <br></br>
+                            {(Math.round(parseInt(recipe.recipe.calories))) + " calories"}
+                        </div>
+                    </div>
+                ))}
             </div>
         </main >
     )

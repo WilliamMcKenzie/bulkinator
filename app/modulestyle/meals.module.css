@@ -13,7 +13,7 @@
     top: 0;
     width: 100vw;
     height: 100vh;
-    background: #F9FAFB;
+    background: white;
     background-size: cover;
     background-repeat: no-repeat;
     z-index: -2;
@@ -22,7 +22,7 @@
 .meals_header_background {
     position: absolute;
     width: 100vw;
-    height: 40vh;
+    height: 30vh;
 
     background: url('../images/meals-header-background.png');
     background-size: cover;
@@ -36,9 +36,9 @@
 .meals_header {
     position: absolute;
     right: 0;
-    top: 10vh;
+    top: 5vh;
     width: 100vw;
-    height: 40vh;
+    height: 30vh;
 
     display: flex;
     flex-direction: column;
@@ -221,6 +221,50 @@
     left: 0;
 }
 
+.recipes_list {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(16%, auto));
+    max-width: 100%;
+    min-width: 500px;
+    margin-top: 30vh;
+    width: 70vw;
+    height: 60vh;
+    overflow-y: scroll;
+}
+
+.recipes_list::-webkit-scrollbar {
+    visibility: hidden;
+}
+
+.recipe_card {
+    margin: 10px;
+    overflow: hidden;
+    height: 300px;
+
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: flex-start;
+
+    transition: 0.3s;
+}
+
+.recipe_card img {
+    height: 200px;
+    width: 100%;
+    margin: 0;
+    object-fit: cover;
+}
+
+.recipe_card_info {
+    background-color: white;
+    height: 70px;
+    width: 80%;
+    padding: 10%;
+    margin: 0;
+}
+
 @media (hover: hover) and (pointer: fine) {
     .navbar a:hover {
         color: var(--primary);
@@ -251,6 +295,11 @@
 
     .heartIcon:hover {
         border: 2px solid var(--primary);
+        cursor: pointer;
+    }
+
+    .recipe_card:hover {
+        filter: brightness(0.95);
         cursor: pointer;
     }
 }
