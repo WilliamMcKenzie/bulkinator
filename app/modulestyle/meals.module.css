@@ -5,7 +5,6 @@
     align-items: center;
     padding: 6rem;
     max-height: 100vh;
-    overflow-y: scroll;
 }
 
 .meals_background {
@@ -117,7 +116,7 @@
     width: 80vw;
     height: 10vh;
 
-    color: white    ;
+    color: white;
 }
 
 .auth_container {
@@ -212,26 +211,37 @@
     left: 0;
 }
 
-.recipes_list {
+.recipe_chunk {
     display: grid;
     grid-template-columns: repeat(4, minmax(25%, auto));
     max-width: 100%;
     min-width: 500px;
-    margin-top: 25vh;
+    width: 80vw;
+}
+
+.recipes_list {
+    max-width: 100%;
+    min-width: 500px;
+    margin-top: 30vh;
     width: 80vw;
     height: 60vh;
     overflow-y: scroll;
     position: relative;
+
+    transition: 0.3s;
 }
 
-.recipes_list::-webkit-scrollbar {
-    visibility: hidden;
+.recipes_list_full_view {
+    margin-top: 10vh !important;
+    height: 80vh !important;
 }
+
+.recipes_list::-webkit-scrollbar {}
 
 .recipe_card {
     margin: 10px;
     overflow: hidden;
-    height: 400px;
+    height: 375px;
 
     display: flex;
     flex-direction: column;
@@ -251,18 +261,18 @@
 
 .recipe_card_info {
     background-color: white;
-    height: 100px;
-    width: calc(90% - 2px);
+    height: calc(150px - 5vh);
+    width: calc(100% - 2px - 5vh);
     border: 1px solid rgb(212, 212, 212) !important;
     border-top: none !important;
-    padding: 5%;
+    padding: 2.5vh;
     margin: 0;
 }
 
 .recipe_card_info label {
     width: 100%;
     display: block;
-    overflow:hidden;
+    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 
@@ -273,10 +283,23 @@
 }
 
 .pages {
-    position: relative;
-    bottom: 0;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
     display: flex;
+}
 
+
+.pages button {
+    color: white;
+    font-family: 'Inter';
+    font-weight: 700;
+    background-color: var(--primary);
+    padding: 15px;
+    border-radius: 20px;
+    border: 2px solid var(--primary);
+
+    transition: 0.3s;
 }
 
 
@@ -315,6 +338,13 @@
 
     .recipe_card:hover {
         filter: brightness(0.95);
+        cursor: pointer;
+    }
+
+    .pages button:hover {
+        background-color: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
         cursor: pointer;
     }
 }
