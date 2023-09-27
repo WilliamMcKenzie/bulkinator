@@ -20,7 +20,9 @@ export default function Home() {
 
     const [recipes, setRecipes] = useState([]);
     const [recipeInput, setRecipeInput] = useState('');
-    const [pages, setPages] = useState([])
+    const [nextLink, setNextLink] = useState([])
+    const [lastInput, setLastInput] = useState("")
+
 
 
     useEffect(() => {
@@ -28,13 +30,16 @@ export default function Home() {
         async function callProtein() {
             const meals = await fetcher(`/api/meals?input=protein`, false)
             setRecipes(meals.hits)
+            setNextLink(meals._links.next.href)
         }
         callProtein()
         return () => { }
     }, [])
 
-    const nextPage = () => {
-
+    const loadMore = async () => {
+        const meals = await fetcher(`/api/nextPage?url=${nextLink}&input=${lastInput}`, false)
+        setRecipes(meals.hits)
+        setNextLink(meals._links.next.href)
     }
 
     return (
@@ -68,6 +73,7 @@ export default function Home() {
                     <FontAwesomeIcon className={styles.searchIcon} icon={faSearch} onClick={async () => {
                         const meals = await fetcher(`/api/meals?input=${recipeInput}`, false)
                         console.log(meals.hits)
+                        setLastInput(recipeInput)
                         setRecipes(meals.hits)
                     }} />
                     <FontAwesomeIcon className={styles.heartIcon} icon={faHeart} />
@@ -87,9 +93,8 @@ export default function Home() {
                 )) : <h1>Sorry !! No recipes found</h1>}
             </div>
             <div className={styles.pages}>
-                    <button>Prev</button>
-                    <button>Next</button>
-                </div>
+                <button onClick={loadMore}>Load More</button>
+            </div>
         </main >
     )
 }
