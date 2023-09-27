@@ -20,6 +20,7 @@ export default function Home() {
 
     const [recipes, setRecipes] = useState([]);
     const [recipeInput, setRecipeInput] = useState('');
+    const [pages, setPages] = useState([])
 
 
     useEffect(() => {
@@ -32,25 +33,17 @@ export default function Home() {
         return () => { }
     }, [])
 
+    const nextPage = () => {
+
+    }
+
     return (
         <main className={styles.main}>
-            <div className={styles.navbar_background}></div>
             <div className={styles.navbar}>
-                <h1 className={styles.logo_container}>
+                <a className={styles.logo_container} href='./'>
                     <img src="data:image/gif;base64,R0lGODlhAQABAPcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAP8ALAAAAAABAAEAAAgEAP8FBAA7"></img>
                     BULKINATOR
-                </h1>
-                <div className={styles.navbar_buttons}>
-                    <a href="./">
-                        Home
-                    </a>
-                    <a className={styles.highlighted} href="./meals">
-                        Meals
-                    </a>
-                    <a href="./exercises">
-                        Excercises
-                    </a>
-                </div>
+                </a>
                 <div className={styles.auth_container}>
                     <a className={styles.login} href="./login">
                         Login
@@ -82,17 +75,21 @@ export default function Home() {
             </div>
 
             <div className={styles.recipes_list}>
-                {recipes.map((recipe, index) => (
+                {recipes.length > 0 ? recipes.map((recipe, index) => (
                     <div key={index} className={styles.recipe_card}>
                         <img src={recipe.recipe.image}></img>
                         <div className={styles.recipe_card_info}>
-                            {recipe.recipe.label}
-                            <br></br>
+                            {((recipe.recipe.dishType).toString()).toUpperCase()}
+                            <label>{recipe.recipe.label}</label>
                             {(Math.round(parseInt(recipe.recipe.calories))) + " calories"}
                         </div>
                     </div>
-                ))}
+                )) : <h1>Sorry !! No recipes found</h1>}
             </div>
+            <div className={styles.pages}>
+                    <button>Prev</button>
+                    <button>Next</button>
+                </div>
         </main >
     )
 }

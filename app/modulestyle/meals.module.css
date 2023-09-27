@@ -5,7 +5,7 @@
     align-items: center;
     padding: 6rem;
     max-height: 100vh;
-    overflow-y: hidden;
+    overflow-y: scroll;
 }
 
 .meals_background {
@@ -22,7 +22,7 @@
 .meals_header_background {
     position: absolute;
     width: 100vw;
-    height: 30vh;
+    height: 50vh;
 
     background: url('../images/meals-header-background.png');
     background-size: cover;
@@ -36,14 +36,14 @@
 .meals_header {
     position: absolute;
     right: 0;
-    top: 5vh;
+    top: 0;
     width: 100vw;
-    height: 30vh;
+    height: 35vh;
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .meals_header h1 {
@@ -55,6 +55,7 @@
     width: fit-content;
     background-color: white;
     padding: 2px;
+    margin-bottom: 5vh;
     border-radius: 20px;
 
     display: flex;
@@ -106,20 +107,6 @@
     color: var(--primary);
 }
 
-.navbar_background {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    top: 0;
-
-    z-index: 1;
-    width: 100vw;
-    height: 10vh;
-
-    background-color: white;
-    border-bottom: 1px solid rgb(231, 231, 231);
-}
-
 .navbar {
     position: absolute;
     display: flex;
@@ -129,6 +116,8 @@
     z-index: 2;
     width: 80vw;
     height: 10vh;
+
+    color: white    ;
 }
 
 .auth_container {
@@ -176,6 +165,8 @@
     display: flex;
     align-items: center;
     margin: 0;
+    font-weight: 700 !important;
+    font-size: 2rem !important;
 }
 
 .logo_container img {
@@ -223,13 +214,14 @@
 
 .recipes_list {
     display: grid;
-    grid-template-columns: repeat(6, minmax(16%, auto));
+    grid-template-columns: repeat(4, minmax(25%, auto));
     max-width: 100%;
     min-width: 500px;
-    margin-top: 30vh;
-    width: 70vw;
+    margin-top: 25vh;
+    width: 80vw;
     height: 60vh;
     overflow-y: scroll;
+    position: relative;
 }
 
 .recipes_list::-webkit-scrollbar {
@@ -239,19 +231,19 @@
 .recipe_card {
     margin: 10px;
     overflow: hidden;
-    height: 300px;
+    height: 400px;
 
     display: flex;
     flex-direction: column;
     align-content: center;
-    justify-content: center;
-    align-items: flex-start;
+    justify-content: flex-start;
+    align-items: center;
 
     transition: 0.3s;
 }
 
 .recipe_card img {
-    height: 200px;
+    height: 225px;
     width: 100%;
     margin: 0;
     object-fit: cover;
@@ -259,11 +251,34 @@
 
 .recipe_card_info {
     background-color: white;
-    height: 70px;
-    width: 80%;
-    padding: 10%;
+    height: 100px;
+    width: calc(90% - 2px);
+    border: 1px solid rgb(212, 212, 212) !important;
+    border-top: none !important;
+    padding: 5%;
     margin: 0;
 }
+
+.recipe_card_info label {
+    width: 100%;
+    display: block;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.pages {
+    position: relative;
+    bottom: 0;
+    display: flex;
+
+}
+
 
 @media (hover: hover) and (pointer: fine) {
     .navbar a:hover {
