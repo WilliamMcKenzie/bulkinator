@@ -10,7 +10,6 @@ config.autoAddCss = false
 
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { faTag } from '@fortawesome/free-solid-svg-icons'
-import { faFilter } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
 
@@ -21,12 +20,13 @@ const fetcher = (url, data) => {
 export default function Home() {
 
     const recipeRef = useRef();
+    const loadRef = useRef();
 
     const [recipes, setRecipes] = useState([]);
     const [recipeInput, setRecipeInput] = useState('');
     const [nextLink, setNextLink] = useState("")
     const [lastInput, setLastInput] = useState("")
-    
+
     const [diet, setDiet] = useState("balanced")
 
     const [recipeListClass, setRecipeListClass] = useState(cn(styles.recipes_list))
@@ -51,7 +51,7 @@ export default function Home() {
 
         async function callProtein() {
             const meals = await fetcher(`/api/meals?input=protein%20meals&diet=high-protein`, false)
-            setRecipes(oldArr => [...oldArr, meals.hits]);
+            setRecipes([meals.hits]);
             if (meals._links.next) {
                 setNextLink(meals._links.next.href)
             }
@@ -63,6 +63,7 @@ export default function Home() {
 
     const loadMore = async () => {
         if (lastInput && nextLink) {
+
             const meals = await fetcher(`/api/nextPage?url=${nextLink}&input=${lastInput}`, false)
             setRecipes(oldArr => [...oldArr, meals.hits]);
             if (meals._links.next) setNextLink(meals._links.next.href)
@@ -145,7 +146,7 @@ export default function Home() {
                             <div />
                         </div>
                     )) : <></>}
-                    <div className={styles.pages}>
+                    <div className={styles.pages} ref={loadRef}>
                         {nextLink && lastInput ? <button onClick={loadMore}>Load More</button> : <></>}
                     </div>
                 </div>

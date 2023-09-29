@@ -2,6 +2,7 @@
   --max-width: 1100px;
   --border-radius: 12px;
   --font-mono: 'Inter';
+  --font-code: 'Inter';
   --primary: rgb(255, 115, 0);
 }
 
@@ -29,4 +30,9 @@ a {
 @font-face {
   font-family: 'Inter';
   src: url('./Inter.ttf');
+}
+
+@font-face {
+  font-family: 'Code';
+  src: url('./JetBrainsMono-Regular.ttf');
 }

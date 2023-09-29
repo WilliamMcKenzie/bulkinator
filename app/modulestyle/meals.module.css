@@ -5,6 +5,8 @@
     align-items: center;
     padding: 6rem;
     max-height: 100vh;
+
+    --primary: #2274A5;
 }
 
 .meals_background {
@@ -44,11 +46,17 @@
     align-items: center;
     justify-content: flex-end;
 
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    overflow: hidden;
+
     transition: 0.3s;
 }
 
 .meals_header_contain_view {
     height: 10vh !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
 }
 
 .meals_header_contain_view .meals_input {
@@ -218,6 +226,7 @@
     margin: 10px;
     border: 0;
     outline: none;
+    filter: hue-rotate(180deg);
     background-image: url('../favicon.png');
     background-repeat: no-repeat;
     background-size: contain;
@@ -286,6 +295,7 @@
     margin: 10px;
     overflow: hidden;
     height: 375px;
+    border-radius: 20px;
 
     display: flex;
     flex-direction: column;
@@ -306,9 +316,7 @@
 .recipe_card_info {
     background-color: white;
     height: calc(150px - 5vh);
-    width: calc(100% - 2px - 5vh);
-    border: 1px solid rgb(212, 212, 212) !important;
-    border-top: none !important;
+    width: calc(100% - 5vh);
     padding: 2.5vh;
     margin: 0;
 }
@@ -344,6 +352,26 @@
     border: 2px solid var(--primary);
 
     transition: 0.3s;
+}
+
+/* width */
+.recipes_list::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.recipes_list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.recipes_list::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+.recipes_list::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
 }
 
 
