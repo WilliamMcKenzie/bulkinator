@@ -43,6 +43,16 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
+
+    transition: 0.3s;
+}
+
+.meals_header_contain_view {
+    height: 10vh !important;
+}
+
+.meals_header_contain_view .meals_input {
+    margin-bottom: 50vh !important;
 }
 
 .meals_header h1 {
@@ -61,6 +71,8 @@
     align-content: center;
     align-items: center;
     justify-content: center;
+
+    transition: 1s;
 }
 
 .meals_input input {
@@ -79,17 +91,6 @@
 }
 
 .searchIcon {
-    color: white;
-    background-color: var(--primary);
-    padding: 15px;
-    border-radius: 20px;
-    border: 2px solid var(--primary);
-    margin-left: 5px;
-
-    transition: 0.3s;
-}
-
-.heartIcon {
     color: var(--primary);
     background-color: white;
     padding: 15px;
@@ -98,6 +99,49 @@
     border: 2px solid transparent;
 
     transition: 0.3s;
+}
+
+.tagButton {
+    display: flex;
+    align-items: center;
+    color: white;
+    background-color: var(--primary);
+    padding: 15px;
+    width: fit-content;
+    border-radius: 20px;
+    border: 2px solid var(--primary);
+    margin-left: 5px;
+    position: relative;
+    overflow: hidden;
+
+    transition: 0.3s;
+}
+
+.tagIcon {
+    margin-right: 5px;
+    transition: 0.3s;
+}
+
+.tagButton select {
+    border: none;
+    outline: none;
+    height: 100%;
+    color: white;
+    font-family: 'Inter';
+    background-color: transparent;
+
+    transition: 0.3s;
+}
+
+.tagButton select option {
+    color: rgb(50, 50, 50);
+    background-color: white;
+    border: none;
+    outline: none;
+}
+
+.tagButton div h1 {
+    color: rgb(33, 33, 33);
 }
 
 .highlighted {
@@ -232,8 +276,8 @@
 }
 
 .recipes_list_full_view {
-    margin-top: 10vh !important;
-    height: 80vh !important;
+    margin-top: 0vh !important;
+    height: 89vh !important;
 }
 
 .recipes_list::-webkit-scrollbar {}
@@ -325,14 +369,19 @@
     }
 
     .searchIcon:hover {
+        border: 2px solid var(--primary);
+        cursor: pointer;
+    }
+
+    .tagButton:hover {
         background-color: white;
         color: var(--primary);
         border: 2px solid var(--primary);
         cursor: pointer;
     }
 
-    .heartIcon:hover {
-        border: 2px solid var(--primary);
+    .tagButton:hover select {
+        color: var(--primary);
         cursor: pointer;
     }
 

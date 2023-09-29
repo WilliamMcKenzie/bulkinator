@@ -4,6 +4,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
   const input = searchParams.get('input')
+  const diet = searchParams.get('diet')
 
   const apiKey = '4487c73d45a1038e4bb07fbb970f535d';
   const appId = '35545a91';
@@ -13,7 +14,8 @@ export async function GET(request: NextRequest) {
     q: input,
     app_id: appId,
     app_key: apiKey,
-    fields: 'label'
+    fields: 'label',
+    diet: diet
   };
 
   const response = await axios.get('https://api.edamam.com/api/recipes/v2', {

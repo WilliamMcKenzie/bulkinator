@@ -9,7 +9,7 @@ import { useRef } from 'react';
 config.autoAddCss = false
 
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { faHeart } from '@fortawesome/free-solid-svg-icons'
+import { faTag } from '@fortawesome/free-solid-svg-icons'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
@@ -26,14 +26,23 @@ export default function Home() {
     const [recipeInput, setRecipeInput] = useState('');
     const [nextLink, setNextLink] = useState("")
     const [lastInput, setLastInput] = useState("")
+    
+    const [diet, setDiet] = useState("balanced")
 
     const [recipeListClass, setRecipeListClass] = useState(cn(styles.recipes_list))
+    const [headerClass, setHeaderClass] = useState(cn(styles.meals_header, styles.meals_header_contain_view))
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries, observer) => {
             const entry = entries[0];
-            if (entry.isIntersecting) setRecipeListClass(cn(styles.recipes_list))
-            else setRecipeListClass(cn(styles.recipes_list, styles.recipes_list_full_view))
+            if (entry.isIntersecting) {
+                setRecipeListClass(cn(styles.recipes_list))
+                setHeaderClass(cn(styles.meals_header))
+            }
+            else {
+                setRecipeListClass(cn(styles.recipes_list, styles.recipes_list_full_view))
+                setHeaderClass(cn(styles.meals_header, styles.meals_header_contain_view))
+            }
         });
         observer.observe(recipeRef.current);
     }, []);
@@ -41,7 +50,7 @@ export default function Home() {
     useEffect(() => {
 
         async function callProtein() {
-            const meals = await fetcher(`/api/meals?input=protein%20meals`, false)
+            const meals = await fetcher(`/api/meals?input=protein%20meals&diet=high-protein`, false)
             setRecipes(oldArr => [...oldArr, meals.hits]);
             if (meals._links.next) {
                 setNextLink(meals._links.next.href)
@@ -53,7 +62,6 @@ export default function Home() {
     }, [])
 
     const loadMore = async () => {
-        observer.observe(document.getElementById('0'));
         if (lastInput && nextLink) {
             const meals = await fetcher(`/api/nextPage?url=${nextLink}&input=${lastInput}`, false)
             setRecipes(oldArr => [...oldArr, meals.hits]);
@@ -61,6 +69,10 @@ export default function Home() {
             else setNextLink(false)
         }
     }
+
+    const handleChange = (e) => {
+        setDiet(e.target.value);
+    };
 
     return (
         <main className={styles.main}>
@@ -80,7 +92,7 @@ export default function Home() {
             </div>
 
             <div className={styles.meals_background}></div>
-            <div className={styles.meals_header}>
+            <div className={headerClass}>
                 <div className={styles.meals_header_background}></div>
                 <h1>Have a dish in mind?</h1>
                 <div className={styles.meals_input}>
@@ -91,14 +103,24 @@ export default function Home() {
                         }}>
                     </input>
                     <FontAwesomeIcon className={styles.searchIcon} icon={faSearch} onClick={async () => {
-                        const meals = await fetcher(`/api/meals?input=${recipeInput}`, false)
+                        const meals = await fetcher(`/api/meals?input=${recipeInput}&diet=${diet}`, false)
+                        console.log(diet)
                         setLastInput(recipeInput)
                         if (meals._links.next) setNextLink(meals._links.next.href)
                         else setNextLink(false)
                         setRecipes([])
                         setRecipes(oldArr => [...oldArr, meals.hits]);
                     }} />
-                    <FontAwesomeIcon className={styles.heartIcon} icon={faHeart} />
+                    <button className={styles.tagButton}>
+                        <FontAwesomeIcon className={styles.tagIcon} icon={faTag} />
+                        <select onChange={(e) => handleChange(e)}>
+                            <option value="balanced">Balanced</option>
+                            <option value="high-protein">High Protein</option>
+                            <option value="high-fiber">High Fiber</option>
+                            <option value="low-carb">Low Carb</option>
+                            <option value="low-fat">Low Fat</option>
+                        </select>
+                    </button>
                 </div>
             </div>
             <div className={styles.recipes_container}>
@@ -109,7 +131,9 @@ export default function Home() {
 
                         <div className={styles.recipe_chunk} key={index} id={index.toString()}>
                             {recipeList.map((curRecipe, index) => (
-                                <div key={index} className={styles.recipe_card}>
+                                <div key={index} className={styles.recipe_card} onClick={() => {
+                                    window.open(`/meals/${encodeURIComponent(curRecipe._links.self.href)}`)
+                                }}>
                                     <img src={curRecipe.recipe.image}></img>
                                     <div className={styles.recipe_card_info}>
                                         {curRecipe.recipe.dishType ? ((curRecipe.recipe.dishType).toString()).toUpperCase() : ""}
