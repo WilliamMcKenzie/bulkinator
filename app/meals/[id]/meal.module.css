@@ -99,6 +99,32 @@
     background-size: contain;
 }
 
+.recipe_card {
+    display: flex;
+    background-color: rgb(245, 245, 245);
+    border-radius: 20px;
+    padding-right: 2vw;
+}
+
+.recipe_card img {
+    max-width: 50%;
+    height: 40vh;
+
+    border-radius: 20px;
+}
+
+.recipe_card_content {
+    margin-left: 2vw;
+}
+
+.recipe_card_content a {
+    color: var(--primary);
+}
+
+.quick_macros {
+    line-height: 0.5;
+}
+
 
 @media (hover: hover) and (pointer: fine) {
     .navbar a:hover {
