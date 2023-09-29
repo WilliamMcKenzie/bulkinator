@@ -5,6 +5,7 @@
     align-items: center;
     padding: 6rem;
     max-height: 100vh;
+    overflow-y: hidden;
 }
 
 .meals_header_background {
@@ -103,6 +104,8 @@
     display: flex;
     background-color: rgb(245, 245, 245);
     border-radius: 20px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
     padding-right: 2vw;
 }
 
@@ -111,6 +114,10 @@
     height: 40vh;
 
     border-radius: 20px;
+}
+
+.recipe {
+    width: 60vw;
 }
 
 .recipe_card_content {
@@ -125,6 +132,39 @@
     line-height: 0.5;
 }
 
+.full_details {
+    height: 45vh;
+    overflow-y: scroll;
+    display: flex;
+    border: 2px solid rgb(245, 245, 245);;
+    border-radius: 20px;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+
+.ingredients {
+    margin-left: 2.5vw;
+}
+
+.nutrition {
+    margin-left: auto;
+    margin-right: 2.5vw;
+}
+
+.nutrition p {
+    margin-top: 20px;
+}
+
+.nutrition_header {
+    display: flex;
+    flex-direction: column;
+}
+
+.nutrition_header p {
+    margin: 0;
+    margin-left: 20px;
+    margin-top: 20px;
+}
 
 @media (hover: hover) and (pointer: fine) {
     .navbar a:hover {
