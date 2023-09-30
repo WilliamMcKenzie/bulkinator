@@ -54,7 +54,7 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2>
-            Plan Meals <span>-&gt;</span>
+            Find Meals <span>-&gt;</span>
           </h2>
           <p>Cook meals that work for you.</p>
         </a>
@@ -65,9 +65,9 @@ export default function Home() {
           rel="noopener noreferrer"
         >
           <h2>
-            Find Excercises<span>-&gt;</span>
+            Plan Diet<span>-&gt;</span>
           </h2>
-          <p>It all starts with the gym.</p>
+          <p>Organization is power.</p>
         </a>
       </div>
     </main >

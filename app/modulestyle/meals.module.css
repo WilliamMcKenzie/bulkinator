@@ -31,7 +31,7 @@
     background-repeat: no-repeat;
     z-index: -1;
 
-    filter: brightness(0.3);
+    filter: brightness(0.6);
 }
 
 .meals_header {
@@ -302,8 +302,45 @@
     align-content: center;
     justify-content: flex-start;
     align-items: center;
+    position: relative;
 
     transition: 0.3s;
+}
+
+.recipe_card_selected {
+    margin: 10px;
+    overflow: hidden;
+    height: 375px;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+
+    transition: 0.3s;
+}
+
+.bookmarkIcon {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    top: 10px;
+    right: 10px;
+    color: white;
+    visibility: hidden;
+}
+
+.bookmarkSelected {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    top: 10px;
+    right: 10px;
+    color: rgb(201, 219, 255);
+    visibility: visible !important;
+    z-index: 5;
 }
 
 .recipe_card img {
@@ -313,12 +350,20 @@
     object-fit: cover;
 }
 
+.recipe_img_selected {
+    filter: brightness(0.5) !important;
+}
+
 .recipe_card_info {
     background-color: white;
     height: calc(150px - 5vh);
     width: calc(100% - 5vh);
     padding: 2.5vh;
     margin: 0;
+}
+
+.recipe_info_selected {
+    filter: brightness(0.9) !important;
 }
 
 .recipe_card_info label {
@@ -416,6 +461,26 @@
     .recipe_card:hover {
         filter: brightness(0.95);
         cursor: pointer;
+    }
+
+    .recipe_card:hover img {
+        filter: brightness(0.5);
+    }
+
+    .recipe_card:hover .recipe_card_info {
+        filter: brightness(0.5);
+    }
+
+    .recipe_card:hover .bookmarkIcon {
+        visibility: visible;
+    }
+
+    .bookmarkIcon:hover {
+        color: rgb(201, 219, 255)
+    }
+
+    .bookmarkSelected:hover {
+        color: rgb(144, 168, 218)
     }
 
     .pages button:hover {
