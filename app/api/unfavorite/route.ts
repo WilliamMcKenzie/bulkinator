@@ -30,6 +30,11 @@ export async function GET(request: NextRequest) {
             }
         }
     })
+    await prisma.recipe.delete({
+        where: {
+            id: recipe.id
+        }
+    })
 
 
     return NextResponse.json(recipe)

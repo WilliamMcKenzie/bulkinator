@@ -1,0 +1,492 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-top: 6rem;
+    max-height: 100vh;
+
+    --primary: #D72638;
+}
+
+.meals_background {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    background-size: cover;
+    background-repeat: no-repeat;
+    z-index: -2;
+}
+
+.meals_header_background {
+    position: absolute;
+    width: 100vw;
+    height: 50vh;
+
+    background: url('../images/planner-background.png');
+    background-size: cover;
+    background-position-y: -300px;
+    background-repeat: no-repeat;
+    z-index: -1;
+
+    filter: brightness(0.6);
+}
+
+.meals_header {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100vw;
+    height: 35vh;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+
+    border-bottom-left-radius: 50px;
+    border-bottom-right-radius: 50px;
+    overflow: hidden;
+
+    transition: 0.3s;
+}
+
+.meals_header_contain_view {
+    height: 10vh !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.meals_header_contain_view .meals_input {
+    margin-bottom: 50vh !important;
+}
+
+.meals_header h1 {
+    color: white;
+    font-weight: 200;
+}
+
+.meals_input {
+    width: fit-content;
+    background-color: white;
+    padding: 2px;
+    margin-bottom: 5vh;
+    border-radius: 20px;
+
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+
+    transition: 1s;
+}
+
+.meals_input input {
+    outline: none;
+    border: none;
+    border-radius: 18px;
+    border: 2px solid transparent;
+
+    font-family: 'Inter';
+    font-size: 1rem;
+    padding-left: 10px;
+    width: 20vw;
+    height: 90%;
+
+    transition: 0.3s;
+}
+
+.searchIcon {
+    color: var(--primary);
+    background-color: white;
+    padding: 15px;
+    border-radius: 20px;
+    margin-left: 5px;
+    border: 2px solid transparent;
+
+    transition: 0.3s;
+}
+
+.tagButton {
+    display: flex;
+    align-items: center;
+    color: white;
+    background-color: var(--primary);
+    padding: 15px;
+    width: fit-content;
+    border-radius: 20px;
+    border: 2px solid var(--primary);
+    margin-left: 5px;
+    position: relative;
+    overflow: hidden;
+
+    transition: 0.3s;
+}
+
+.tagIcon {
+    margin-right: 5px;
+    transition: 0.3s;
+}
+
+.tagButton select {
+    border: none;
+    outline: none;
+    height: 100%;
+    color: white;
+    font-family: 'Inter';
+    background-color: transparent;
+
+    transition: 0.3s;
+}
+
+.tagButton select option {
+    color: rgb(50, 50, 50);
+    background-color: white;
+    border: none;
+    outline: none;
+}
+
+.tagButton div h1 {
+    color: rgb(33, 33, 33);
+}
+
+.highlighted {
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--primary);
+}
+
+.navbar {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    top: 0;
+
+    z-index: 2;
+    width: 80vw;
+    height: 10vh;
+
+    color: white;
+}
+
+.auth_container {
+    margin-left: auto;
+}
+
+.auth_container a {
+    border-radius: 40px;
+    padding: 15px;
+}
+
+.login {
+    color: var(--primary);
+    background-color: white !important;
+}
+
+.register {
+    color: white;
+    background-color: var(--primary) !important;
+    margin-left: 2px !important;
+}
+
+.navbar_buttons {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+.navbar a {
+    background: transparent;
+    border: 0;
+    margin-left: 20px;
+
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 1rem;
+    transition: 100ms;
+}
+
+.logo_container {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    font-weight: 700 !important;
+    font-size: 2rem !important;
+}
+
+.logo_container img {
+    height: 8vh;
+    width: 8vh;
+    margin: 10px;
+    border: 0;
+    outline: none;
+    filter: hue-rotate(330deg);
+    background-image: url('../favicon.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 0;
+    top: 10vh;
+    width: 10vw;
+    height: 90vh;
+    background-color: white;
+
+    z-index: 0;
+}
+
+.sidebar button {
+    background-color: white;
+    border: 0;
+    padding: 15px;
+    font-family: 'Inter';
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgb(44, 44, 44);
+}
+
+.faIcon {
+    width: 30px;
+    height: 30px;
+    color: rgb(44, 44, 44);
+
+    position: absolute;
+    left: 0;
+}
+
+.recipe_chunk {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(50%, auto));
+    max-width: 100%;
+    min-width: 300px;
+    width: 80vw;
+}
+
+.recipes_list {
+    max-width: 30%;
+    min-width: 300px;
+    margin-top: 30vh;
+    width: 80vw;
+    height: 60vh;
+    overflow-y: scroll;
+    position: relative;
+
+    transition: 0.3s;
+}
+
+.recipes_list_full_view {
+    margin-top: 0vh !important;
+    height: 89vh !important;
+}
+
+.recipes_list::-webkit-scrollbar {}
+
+.recipe_card {
+    margin: 10px;
+    overflow: hidden;
+    height: 375px;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    position: relative;
+
+    transition: 0.3s;
+}
+
+.recipe_card_selected {
+    margin: 10px;
+    overflow: hidden;
+    height: 375px;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: flex-start;
+    align-items: center;
+
+    transition: 0.3s;
+}
+
+.bookmarkIcon {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    top: 10px;
+    right: 10px;
+    color: white;
+    visibility: hidden;
+}
+
+.bookmarkSelected {
+    position: absolute;
+    width: 2rem;
+    height: 2rem;
+    top: 10px;
+    right: 10px;
+    color: rgb(201, 219, 255);
+    visibility: visible !important;
+    z-index: 5;
+}
+
+.recipe_card img {
+    height: 225px;
+    width: 100%;
+    margin: 0;
+    object-fit: cover;
+}
+
+.recipe_img_selected {
+    filter: brightness(0.5) !important;
+}
+
+.recipe_card_info {
+    background-color: white;
+    height: calc(150px - 5vh);
+    width: calc(100% - 5vh);
+    padding: 2.5vh;
+    margin: 0;
+}
+
+.recipe_info_selected {
+    filter: brightness(0.9) !important;
+}
+
+.recipe_card_info label {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.pages {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    display: flex;
+}
+
+
+.pages button {
+    color: white;
+    font-family: 'Inter';
+    font-weight: 700;
+    background-color: var(--primary);
+    padding: 15px;
+    border-radius: 20px;
+    border: 2px solid var(--primary);
+
+    transition: 0.3s;
+}
+
+/* width */
+.recipes_list::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.recipes_list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.recipes_list::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+.recipes_list::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+
+@media (hover: hover) and (pointer: fine) {
+    .navbar a:hover {
+        color: var(--primary);
+        cursor: pointer;
+    }
+
+    .register:hover {
+        color: white !important;
+        filter: brightness(1.1);
+        cursor: pointer;
+    }
+
+    .login:hover {
+        filter: brightness(0.9);
+        cursor: pointer;
+    }
+
+    .meals_input input:focus {
+        border: 2px solid var(--primary);
+    }
+
+    .searchIcon:hover {
+        border: 2px solid var(--primary);
+        cursor: pointer;
+    }
+
+    .tagButton:hover {
+        background-color: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        cursor: pointer;
+    }
+
+    .tagButton:hover select {
+        color: var(--primary);
+        cursor: pointer;
+    }
+
+    .recipe_card:hover {
+        filter: brightness(0.95);
+        cursor: pointer;
+    }
+
+    .recipe_card:hover img {
+        filter: brightness(0.5);
+    }
+
+    .recipe_card:hover .recipe_card_info {
+        filter: brightness(0.5);
+    }
+
+    .recipe_card:hover .bookmarkIcon {
+        visibility: visible;
+    }
+
+    .bookmarkIcon:hover {
+        color: rgb(201, 219, 255)
+    }
+
+    .bookmarkSelected:hover {
+        color: rgb(144, 168, 218)
+    }
+
+    .pages button:hover {
+        background-color: white;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+        cursor: pointer;
+    }
+}

@@ -17,8 +17,8 @@ export default function Home() {
           <a href="./meals">
             Meals
           </a>
-          <a href="./exercises">
-            Excercises
+          <a href="./planner">
+            Planner
           </a>
         </div>
         <div className={styles.auth_container}>
@@ -59,7 +59,7 @@ export default function Home() {
           <p>Cook meals that work for you.</p>
         </a>
         <a
-          href="./excercises"
+          href="./planner"
           className={styles.card}
           target="_blank"
           rel="noopener noreferrer"
