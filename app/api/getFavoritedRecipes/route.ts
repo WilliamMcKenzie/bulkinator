@@ -9,6 +9,9 @@ export async function GET(request: NextRequest) {
     const currentUserID = searchParams.get('id')
     var uriValue = ""
 
+    var overflowValues = []
+    var overflowResponses = []
+
     const user = await prisma.user.findFirst({
         where: {
             id: currentUserID
@@ -22,10 +25,56 @@ export async function GET(request: NextRequest) {
     const appId = '35545a91';
     var qs = require('qs');
 
-    user.recipes.forEach(curRecipe => {
-        if (curRecipe.url.includes("http") && uriValue == "") uriValue+=`uri=${encodeURIComponent(curRecipe.url)}`
-        else if (curRecipe.url.includes("http")) uriValue+=`&uri=${encodeURIComponent(curRecipe.url)}`
-    });
+    // user.recipes.forEach(curRecipe => {
+    //     if (curRecipe.url.includes("http") && uriValue == "") uriValue+=`uri=${encodeURIComponent(curRecipe.url)}`
+    //     else if (curRecipe.url.includes("http") &&) uriValue+=`&uri=${encodeURIComponent(curRecipe.url)}`
+    // });
+
+    for (let i = 0; i < user.recipes.length; i++) {
+        const curRecipe = user.recipes[i];
+
+        if (curRecipe.url.includes("http") && uriValue == "") uriValue += `uri=${encodeURIComponent(curRecipe.url)}`
+        else if (curRecipe.url.includes("http") && i < 20) uriValue += `&uri=${encodeURIComponent(curRecipe.url)}`
+    }
+
+    if (user.recipes.length < 20) {
+        for (let i = 0; i < user.recipes.length; i++) {
+            const curRecipe = user.recipes[i];
+
+            if (curRecipe.url.includes("http") && uriValue == "") uriValue += `uri=${encodeURIComponent(curRecipe.url)}`
+            else if (curRecipe.url.includes("http") && i < 20) uriValue += `&uri=${encodeURIComponent(curRecipe.url)}`
+        }
+    } else {
+        getOverflow(0)
+    }
+
+    async function getOverflow(loopsCount) {
+
+        var curUriValue = ""
+
+        if (user.recipes.length < 20) {
+            return
+        }
+
+        var count = 0
+
+        for (let i = loopsCount; i < user.recipes.length; i++) {
+            count++
+            const curRecipe = user.recipes[i];
+
+            if (curRecipe.url.includes("http") && curUriValue == "") curUriValue += `uri=${encodeURIComponent(curRecipe.url)}`
+            else if (curRecipe.url.includes("http") && i < loopsCount + 19) curUriValue += `&uri=${encodeURIComponent(curRecipe.url)}`
+            else break;
+        }
+
+        overflowValues.push(uriValue)
+
+        if (count < 20) {
+            return
+        } else {
+            getOverflow((count + loopsCount))
+        }
+    }
 
     const queryParams = {
         type: 'public',
@@ -33,9 +82,24 @@ export async function GET(request: NextRequest) {
         app_key: apiKey
     };
 
-    const response = await axios.get(`https://api.edamam.com/api/recipes/v2/by-uri?${uriValue}`, {
-        params: queryParams
-    });
+    var response
 
-    return NextResponse.json(response.data)
+    if (user.recipes.length < 20) {
+        response = await axios.get(`https://api.edamam.com/api/recipes/v2/by-uri?${uriValue}`, {
+            params: queryParams
+        });
+    } else {
+        for (let i = 0; i < overflowValues.length; i++) {
+            const uri = overflowValues[i];
+            if (uri != "") {
+                const response = await axios.get(`https://api.edamam.com/api/recipes/v2/by-uri?${uri}`, {
+                    params: queryParams
+                });
+                overflowResponses.push(response.data)
+            }
+            overflowResponses.push(`https://api.edamam.com/api/recipes/v2/by-uri?${uri}`)
+        }
+    }
+
+    return user.recipes.length < 20 ? NextResponse.json(response) : NextResponse.json(overflowResponses[0])
 }

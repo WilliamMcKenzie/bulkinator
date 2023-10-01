@@ -24,60 +24,42 @@ export default function Home() {
     var [addedRecipes, setAddedRecipes] = useState({})
 
     const recipeRef = useRef();
-    const loadRef = useRef();
 
     const [recipes, setRecipes] = useState([]);
-    const [nextLink, setNextLink] = useState("")
-    const [lastInput, setLastInput] = useState("")
-
-    const [diet, setDiet] = useState("balanced")
 
     const [recipeListClass, setRecipeListClass] = useState(cn(styles.recipes_list))
     const [headerClass, setHeaderClass] = useState(cn(styles.meals_header, styles.meals_header_contain_view))
 
     useEffect(() => {
-        const observer = new IntersectionObserver((entries, observer) => {
-            const entry = entries[0];
-            if (entry.isIntersecting) {
-                setRecipeListClass(cn(styles.recipes_list))
-                setHeaderClass(cn(styles.meals_header))
-            }
-            else {
-                setRecipeListClass(cn(styles.recipes_list, styles.recipes_list_full_view))
-                setHeaderClass(cn(styles.meals_header, styles.meals_header_contain_view))
-            }
-        });
-        observer.observe(recipeRef.current);
+        setRecipeListClass(cn(styles.recipes_list, styles.recipes_list_full_view))
+        setHeaderClass(cn(styles.meals_header, styles.meals_header_contain_view))
+        // const observer = new IntersectionObserver((entries, observer) => {
+        //     const entry = entries[0];
+        //     if (entry.isIntersecting) {
+        //         setRecipeListClass(cn(styles.recipes_list))
+        //         setHeaderClass(cn(styles.meals_header))
+        //     }
+        //     else {
+        //         setRecipeListClass(cn(styles.recipes_list, styles.recipes_list_full_view))
+        //         setHeaderClass(cn(styles.meals_header, styles.meals_header_contain_view))
+        //     }
+        // });
+        // observer.observe(recipeRef.current);
     }, []);
 
     useEffect(() => {
+        var meals
 
         async function init() {
-            const meals = await fetcher(`/api/getFavoritedRecipes?id=64f7aec6d557116bbb8a6ca4`, false)
+            meals = await fetcher(`/api/getFavoritedRecipes?id=64f7aec6d557116bbb8a6ca4`, false)
             setRecipes([meals.hits]);
-            if (meals._links.next) {
-                setNextLink(meals._links.next.href)
-            }
-            else setNextLink(false)
         }
 
         init()
+
+        console.log(meals)
         return () => { }
     }, [])
-
-    const loadMore = async () => {
-        if (lastInput && nextLink) {
-
-            const meals = await fetcher(`/api/nextPage?url=${nextLink}&input=${lastInput}`, false)
-            setRecipes(oldArr => [...oldArr, meals.hits]);
-            if (meals._links.next) setNextLink(meals._links.next.href)
-            else setNextLink(false)
-        }
-    }
-
-    const handleChange = (e) => {
-        setDiet(e.target.value);
-    };
 
     return (
         <main className={styles.main}>
@@ -90,7 +72,7 @@ export default function Home() {
                     <a className={styles.login} href="./login">
                         Login
                     </a>
-                    <a className={styles.register} href="./register">
+                    <a className={styles.register} onClick={console.log(recipes)}>
                         Register
                     </a>
                 </div>
@@ -101,15 +83,13 @@ export default function Home() {
                 <div className={styles.meals_header_background}></div>
                 <h1>What are you trying to do?</h1>
                 <div className={styles.meals_input}>
-                    <button>Bulk</button>
+                    <button onClick={console.log(recipes)}>Bulk</button>
                     <button>Cut</button>
                 </div>
             </div>
             <div className={styles.recipes_container}>
                 <div className={recipeListClass}>
-                    <div className={styles.pages} ref={recipeRef}>
-                    </div>
-                    {recipes.length > 0 ? recipes.map((recipeList, index) => (
+                    {recipes && recipes.length >= 0 ? recipes.map((recipeList, index) => (
 
                         <div className={styles.recipe_chunk} key={index} id={index.toString()}>
                             {recipeList.map((curRecipe, index) => (
@@ -117,20 +97,12 @@ export default function Home() {
                                     <img src={curRecipe.recipe.image} className={addedRecipes[curRecipe._links.self.href] ? styles.recipe_img_selected : ""} onClick={() => {
                                         window.open(`/meals/${encodeURIComponent(curRecipe._links.self.href)}`)
                                     }}></img>
-                                    {addedRecipes[curRecipe._links.self.href] ? <FontAwesomeIcon icon={faBookmark} className={styles.bookmarkSelected} onClick={async () => {
-                                        var url = encodeURIComponent(curRecipe._links.self.href)
-                                        const unfavorite = await fetcher(`/api/unfavorite?url=${url}&id=64f5ac47bd5c45df8ab214d9`, false)
-                                        setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe._links.self.href]: false }))
-                                    }}></FontAwesomeIcon> :
+                                    <FontAwesomeIcon icon={faPlus} className={styles.bookmarkIcon} onClick={async () => {
+                                        console.log(recipes)
+                                    }}></FontAwesomeIcon>
 
-                                        <FontAwesomeIcon icon={faPlus} className={styles.bookmarkIcon} onClick={async () => {
-                                            var url = encodeURIComponent(curRecipe._links.self.href)
-                                            const favorite = await fetcher(`/api/favorite?url=${url}&id=64f5ac47bd5c45df8ab214d9`, false)
-                                            setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe._links.self.href]: true }))
-                                        }}></FontAwesomeIcon>}
                                     <div className={addedRecipes[curRecipe._links.self.href] ? cn(styles.recipe_card_info, styles.recipe_info_selected) : styles.recipe_card_info}>
-                                        {curRecipe.recipe.dishType ? ((curRecipe.recipe.dishType).toString()).toUpperCase() : ""}
-                                        <label>{curRecipe.recipe.label}</label>
+                                        <label>{curRecipe.recipe.dishType ? ((curRecipe.recipe.dishType).toString()).toUpperCase() : ""}</label>
                                         {(Math.round(parseInt(curRecipe.recipe.calories))) + " calories & " + (Math.round(parseInt(curRecipe.recipe.totalNutrients.PROCNT.quantity))) + "g of protein"}
                                     </div>
                                 </div>
@@ -138,9 +110,6 @@ export default function Home() {
                             <div />
                         </div>
                     )) : <h1>You have not liked any meals!</h1>}
-                    <div className={styles.pages} ref={loadRef}>
-                        {nextLink && lastInput ? <button onClick={loadMore}>Load More</button> : <></>}
-                    </div>
                 </div>
             </div>
         </main >
