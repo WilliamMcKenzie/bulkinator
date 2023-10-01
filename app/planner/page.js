@@ -50,15 +50,14 @@ export default function Home() {
     useEffect(() => {
         var meals
 
+        setRecipes([])
+
         async function init() {
             meals = await fetcher(`/api/getFavoritedRecipes?id=64f7aec6d557116bbb8a6ca4`, false)
-            setRecipes([meals.hits]);
+            meals.forEach(recipe => setRecipes(recipes => [...recipes, recipe.hits]))
         }
 
         init()
-
-        console.log(meals)
-        return () => { }
     }, [])
 
     return (
@@ -109,8 +108,12 @@ export default function Home() {
                             ))}
                             <div />
                         </div>
+
                     )) : <h1>You have not liked any meals!</h1>}
                 </div>
+            </div>
+            <div className={styles.meal_planner_container}>
+
             </div>
         </main >
     )

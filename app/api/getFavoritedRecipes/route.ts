@@ -63,11 +63,11 @@ export async function GET(request: NextRequest) {
             const curRecipe = user.recipes[i];
 
             if (curRecipe.url.includes("http") && curUriValue == "") curUriValue += `uri=${encodeURIComponent(curRecipe.url)}`
-            else if (curRecipe.url.includes("http") && i < loopsCount + 19) curUriValue += `&uri=${encodeURIComponent(curRecipe.url)}`
+            else if (curRecipe.url.includes("http") && i < loopsCount + 20) curUriValue += `&uri=${encodeURIComponent(curRecipe.url)}`
             else break;
         }
 
-        overflowValues.push(uriValue)
+        overflowValues.push(curUriValue)
 
         if (count < 20) {
             return
@@ -97,9 +97,9 @@ export async function GET(request: NextRequest) {
                 });
                 overflowResponses.push(response.data)
             }
-            overflowResponses.push(`https://api.edamam.com/api/recipes/v2/by-uri?${uri}`)
         }
     }
 
-    return user.recipes.length < 20 ? NextResponse.json(response) : NextResponse.json(overflowResponses[0])
+    // return NextResponse.json(overflowValues)
+    return user.recipes.length < 20 ? NextResponse.json(response.data) : NextResponse.json(overflowResponses)
 }

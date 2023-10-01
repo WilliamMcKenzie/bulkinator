@@ -29,7 +29,7 @@
     background-size: cover;
     background-position-y: -300px;
     background-repeat: no-repeat;
-    z-index: -1;
+    z-index: 1;
 
     filter: brightness(0.6);
 }
@@ -272,7 +272,7 @@
 }
 
 .recipes_list {
-    max-width: 30%;
+    padding: 20px;
     min-width: 400px;
     margin-top: 30vh;
     height: 60vh;
@@ -280,6 +280,7 @@
     position: relative;
 
     transition: 0.3s;
+    background: #eeeeee;
 }
 
 .recipes_list_full_view {
@@ -396,6 +397,10 @@
     border: 2px solid var(--primary);
 
     transition: 0.3s;
+}
+
+.meal_planner_container {
+    background-color: #888;
 }
 
 /* width */
