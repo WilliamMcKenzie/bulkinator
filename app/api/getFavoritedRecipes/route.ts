@@ -23,19 +23,6 @@ export async function GET(request: NextRequest) {
 
     const apiKey = '4487c73d45a1038e4bb07fbb970f535d';
     const appId = '35545a91';
-    var qs = require('qs');
-
-    // user.recipes.forEach(curRecipe => {
-    //     if (curRecipe.url.includes("http") && uriValue == "") uriValue+=`uri=${encodeURIComponent(curRecipe.url)}`
-    //     else if (curRecipe.url.includes("http") &&) uriValue+=`&uri=${encodeURIComponent(curRecipe.url)}`
-    // });
-
-    for (let i = 0; i < user.recipes.length; i++) {
-        const curRecipe = user.recipes[i];
-
-        if (curRecipe.url.includes("http") && uriValue == "") uriValue += `uri=${encodeURIComponent(curRecipe.url)}`
-        else if (curRecipe.url.includes("http") && i < 20) uriValue += `&uri=${encodeURIComponent(curRecipe.url)}`
-    }
 
     if (user.recipes.length < 20) {
         for (let i = 0; i < user.recipes.length; i++) {
@@ -100,6 +87,5 @@ export async function GET(request: NextRequest) {
         }
     }
 
-    // return NextResponse.json(overflowValues)
-    return user.recipes.length < 20 ? NextResponse.json(response.data) : NextResponse.json(overflowResponses)
+    return user.recipes.length < 20 ? NextResponse.json([response.data]) : NextResponse.json(overflowResponses)
 }
