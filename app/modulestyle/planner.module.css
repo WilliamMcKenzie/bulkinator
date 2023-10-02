@@ -1,10 +1,12 @@
 .main {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: flex-start;
     padding-top: 6rem;
     max-height: 100vh;
+    width: 100vw;
+    overflow-y: scroll;
 
     --primary: #D72638;
 }
@@ -272,7 +274,7 @@
 }
 
 .recipes_list {
-    padding: 20px;
+    padding: 1vh;
     min-width: 400px;
     margin-top: 30vh;
     height: 60vh;
@@ -285,7 +287,7 @@
 
 .recipes_list_full_view {
     margin-top: 0vh !important;
-    height: 89vh !important;
+    height: 80vh !important;
 }
 
 .recipes_list::-webkit-scrollbar {}
@@ -294,6 +296,7 @@
     margin: 10px;
     overflow: hidden;
     height: 200px;
+    width: 200px;
     border-radius: 20px;
 
     display: flex;
@@ -399,9 +402,191 @@
     transition: 0.3s;
 }
 
-.meal_planner_container {
-    background-color: #888;
+/* section 1*/
+.meal_planner_section {
+    margin-top: 70vh;
+    display: flex;
 }
+
+.meal_planner_container {
+    background-color: #eeeeee;
+    width: calc(100vw - (440px + 2vh));
+    margin: 2vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    margin-top: 0;
+    margin-bottom: 0;
+
+    height: 80vh;
+}
+
+/* section 2*/
+.weight_tracker_section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100vw;
+}
+
+.weight_tracker_header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 20px;
+    grid-area: header;
+}
+
+.weight_tracker_header h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    margin-right: 20px;
+}
+
+.spinIcon {
+    border: 2px solid transparent;
+    border-radius: 20px;
+    margin-right: 15px;
+
+    padding: 15px;
+}
+
+.weight_tracker_statistics {
+    background-color: #eeeeee;
+    border-radius: 20px;
+    position: relative;
+    width: 80vw;
+    margin: 2vh;
+    height: 80vh;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    display: grid;
+    grid-template-areas:
+        'header header header header header'
+        'list list graph graph graph'
+        'list list graph graph graph';
+    gap: 20px;
+}
+
+.weight_list_container {
+    background-color: white;
+    height: 50%;
+    border-radius: 20px;
+    padding: 1vh;
+    padding-bottom: 8vh;
+    position: relative;
+}
+
+.weight_list {
+    height: 100%;
+    overflow-y: scroll;
+    grid-area: list;
+}
+
+.invisible_input {
+    display: flex;
+    align-items: center;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    visibility: hidden;
+    height: 4vh;
+}
+
+.weight_list_input {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+
+    height: 4vh;
+}
+
+.weight_list_input input {
+    outline: none;
+    padding: 15px;
+    margin: 5px;
+    border-radius: 20px;
+    font-family: 'Inter';
+    border: 2px solid transparent;
+
+    transition: 0.3s;
+}
+
+.addIcon {
+    background-color: white;
+    color: var(--primary);
+    margin-left: auto;
+    padding: 15px;
+    margin: 5px;
+    font-family: 'Inter';
+
+    border-radius: 20px;
+    border: 2px solid transparent;
+
+    transition: 0.3s;
+}
+
+.saveIcon {
+    background-color: var(--primary);
+    color: white;
+    margin-left: auto;
+    padding: 15px;
+    margin: 5px;
+    font-family: 'Inter';
+
+    border-radius: 20px;
+    border: 2px solid transparent;
+
+    transition: 0.3s;
+}
+
+.weight_list li {
+    display: flex;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px;
+    background-color: #eeeeee;
+    align-items: center;
+}
+
+.weight_list li p {
+    padding: 10px;
+    margin-left: 10px;
+    border-radius: 10px;
+    background-color: rgb(220, 220, 220);
+}
+
+.deleteIcon {
+    background-color: white;
+    color: var(--primary);
+    margin-left: auto;
+    padding: 15px;
+
+    border-radius: 20px;
+    border: 2px solid transparent;
+
+    transition: 0.3s;
+}
+
+.weight_graph {
+    height: calc(50% + 7vh);
+    padding: 1vh;
+    margin-left: 1vh;
+    border-radius: 20px;
+    background-color: white;
+
+    display: flex;
+    align-items: center;
+    grid-area: graph;
+}
+
 
 /* width */
 .recipes_list::-webkit-scrollbar {
@@ -410,7 +595,7 @@
 
 /* Track */
 .recipes_list::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #eeeeee;
 }
 
 /* Handle */
@@ -418,11 +603,10 @@
     background: #888;
 }
 
-/* Handle on hover */
-.recipes_list::-webkit-scrollbar-thumb:hover {
-    background: var(--primary);
-}
 
+.weight_list::-webkit-scrollbar {
+    visibility: hidden;
+}
 
 @media (hover: hover) and (pointer: fine) {
     .navbar a:hover {
@@ -492,5 +676,32 @@
         color: var(--primary);
         border: 2px solid var(--primary);
         cursor: pointer;
+    }
+
+    .spinIcon:hover {
+        border: 2px solid var(--primary);
+        color: var(--primary);
+        cursor: pointer;
+    }
+
+    .deleteIcon:hover {
+        border: 2px solid var(--primary);
+        cursor: pointer;
+    }
+
+    .addIcon:hover {
+        border: 2px solid var(--primary);
+        cursor: pointer;
+    }
+
+    .saveIcon:hover {
+        border: 2px solid var(--primary);
+        color: var(--primary);
+        background-color: white;
+        cursor: pointer;
+    }
+
+    .weight_list_input input:focus {
+        border: 2px solid var(--primary);
     }
 }

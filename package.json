@@ -15,14 +15,18 @@
     "@prisma/client": "^5.3.1",
     "1s": "^0.0.0",
     "axios": "^1.5.0",
+    "chart.js": "^4.4.0",
     "classnames": "^2.3.2",
+    "faker": "^6.6.6",
     "next": "13.5.2",
     "prisma": "^5.3.1",
     "qs": "^6.11.2",
     "react": "18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.1.0",
     "@types/node": "20.6.5",
     "@types/react": "18.2.22",
     "typescript": "5.2.2"
