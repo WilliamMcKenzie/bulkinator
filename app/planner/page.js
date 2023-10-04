@@ -21,11 +21,13 @@ import {
     LinearScale,
     PointElement,
     LineElement,
+    ArcElement,
     Title,
     Tooltip,
     Legend,
+    BarElement,
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Bar, Line, Doughnut } from 'react-chartjs-2';
 import { faker } from '@faker-js/faker';
 
 ChartJS.register(
@@ -33,6 +35,8 @@ ChartJS.register(
     LinearScale,
     PointElement,
     LineElement,
+    BarElement,
+    ArcElement,
     Title,
     Tooltip,
     Legend
@@ -52,7 +56,8 @@ export const options = {
     },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+var labels = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August',];
+const labels2 = ['12:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 
 export const data = {
     labels,
@@ -60,11 +65,95 @@ export const data = {
         {
             label: 'Weight (2023)',
             data: labels.map(() => faker.datatype.number({ min: 100, max: 200 })),
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: 'rgb(255, 115, 0)',
+            backgroundColor: 'rgba(255, 115, 0, 0.5)',
         },
     ],
 };
+
+labels = ['1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
+
+export const data2 = {
+    labels,
+    datasets: [
+        {
+            label: 'Pan Roast Chicken For One',
+            data: [0, 871, 0, 0, 0, 0, 0],
+            borderColor: 'rgb(255, 115, 0)',
+            backgroundColor: 'rgba(255, 115, 0, 0.5)',
+        },
+        {
+            label: 'Rat City Chili',
+            data: [0, 0, 0, 0, 1433, 0, 0],
+            borderColor: '#BEE7B8',
+            backgroundColor: '#BEE7B8',
+        },
+    ],
+};
+
+export const donutData = {
+    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    datasets: [
+        {
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+            ],
+            borderWidth: 1,
+        },
+    ],
+};
+
+
+export const timeChart = {
+    plugins: {
+        legend: {
+            display: true,
+            position: 'top',
+        },
+        title: {
+            display: true,
+            text: 'Weight over time (lbs)',
+        },
+    },
+    scales: {
+        x: {
+            stacked: true,
+        },
+        y: {
+            stacked: true
+        }
+    }
+};
+
+export const dailyMealsConfig = {
+    responsive: true,
+    plugins: {
+        legend: {
+            display: false,
+            position: 'top',
+        },
+        title: {
+            display: true,
+            text: 'Todays Meals',
+        },
+    },
+};
+
 
 export default function Home() {
 
@@ -131,6 +220,7 @@ export default function Home() {
                     <button>Cut</button>
                 </div>
             </div>
+            <h1 className={styles.header}>Bulk Day 120</h1>
             <div className={styles.meal_planner_section}>
                 <div className={styles.recipes_container}>
                     <div className={recipeListClass}>
@@ -159,17 +249,35 @@ export default function Home() {
                     </div>
                 </div>
                 <div className={styles.meal_planner_container}>
-
+                    <div className={styles.meal_planner_info}>
+                        <div className={styles.meal_list_container}>
+                            <h1>Added Meals</h1>
+                            <ul className={styles.meal_list}>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <div>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className={styles.meal_planner_chart}>
+                        <Bar options={timeChart} data={data2} />
+                        {/* <Doughnut data={donutData}></Doughnut> */}
+                    </div>
                 </div>
             </div>
 
             <div className={styles.weight_tracker_section}>
                 <div className={styles.weight_tracker_statistics}>
                     <div className={styles.weight_tracker_header}>
-                        <h1><FontAwesomeIcon icon={faArrowsRotate} className={styles.spinIcon} />{" "}Bulk Day 120</h1>
-                        <p>Up 54lbs</p>
                     </div>
                     <div className={styles.weight_list_container}>
+                        <h1>Added Weights</h1>
                         <ul className={styles.weight_list}>
                             <li><div>January 1st: <p contentEditable={true}>20</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
                             <li><div>January 1st: <p contentEditable={true}>20</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
@@ -183,7 +291,7 @@ export default function Home() {
                         <p className={styles.weight_list_input}><input placeholder='Weight (lbs)'></input> <FontAwesomeIcon icon={faPlus} className={styles.addIcon} /> <FontAwesomeIcon icon={faFloppyDisk} className={styles.saveIcon} /></p>
                     </div>
                     <div className={styles.weight_graph}>
-                        <Line options={options} data={data} />
+                        <Line options={timeChart} data={data} />
                     </div>
                 </div>
             </div>
