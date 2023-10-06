@@ -11,6 +11,13 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
+import { Button } from '@mui/material/Button';
+
 const fetcher = (url, data) => {
     return axios.get(url, data).then(res => res.data);
 };
@@ -42,7 +49,7 @@ ChartJS.register(
     Legend
 );
 
-export const options = {
+const options = {
     responsive: true,
     plugins: {
         legend: {
@@ -59,7 +66,7 @@ export const options = {
 var labels = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August',];
 const labels2 = ['12:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 
-export const data = {
+const data = {
     labels,
     datasets: [
         {
@@ -73,7 +80,7 @@ export const data = {
 
 labels = ['1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00'];
 
-export const data2 = {
+const data2 = {
     labels,
     datasets: [
         {
@@ -91,7 +98,7 @@ export const data2 = {
     ],
 };
 
-export const donutData = {
+const donutData = {
     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
     datasets: [
         {
@@ -119,7 +126,7 @@ export const donutData = {
 };
 
 
-export const timeChart = {
+const timeChart = {
     plugins: {
         legend: {
             display: true,
@@ -140,7 +147,7 @@ export const timeChart = {
     }
 };
 
-export const dailyMealsConfig = {
+const dailyMealsConfig = {
     responsive: true,
     plugins: {
         legend: {
@@ -199,14 +206,16 @@ export default function Home() {
             <div className={styles.navbar}>
                 <a className={styles.logo_container} href='./'>
                     <img src="data:image/gif;base64,R0lGODlhAQABAPcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAP8ALAAAAAABAAEAAAgEAP8FBAA7"></img>
-                    BULKINATOR
                 </a>
-                <div className={styles.auth_container}>
-                    <a className={styles.login} href="./login">
-                        Login
+                <div className={styles.navbar_container}>
+                    <a href="./">
+                        Home
                     </a>
-                    <a className={styles.register} onClick={console.log(recipes)}>
-                        Register
+                    <a href="./meals">
+                        Search
+                    </a>
+                    <a href="./meals">
+                        Sign Out
                     </a>
                 </div>
             </div>
@@ -222,6 +231,28 @@ export default function Home() {
             </div>
             <h1 className={styles.header}>Bulk Day 120</h1>
             <div className={styles.meal_planner_section}>
+                <div className={styles.meal_planner_container}>
+                    <div className={styles.meal_planner_info}>
+                        <div className={styles.meal_list_container}>
+                            <h1>Added Meals</h1>
+                            <ul className={styles.meal_list}>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
+                                <div>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className={styles.meal_planner_chart}>
+                        <Bar options={timeChart} data={data2} />
+                        {/* <Doughnut data={donutData}></Doughnut> */}
+                    </div>
+                </div>
                 <div className={styles.recipes_container}>
                     <div className={recipeListClass}>
                         {recipes && recipes.length >= 0 ? recipes.map((recipeList, index) => (
@@ -248,28 +279,6 @@ export default function Home() {
                         )) : <h1>You have not liked any meals!</h1>}
                     </div>
                 </div>
-                <div className={styles.meal_planner_container}>
-                    <div className={styles.meal_planner_info}>
-                        <div className={styles.meal_list_container}>
-                            <h1>Added Meals</h1>
-                            <ul className={styles.meal_list}>
-                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
-                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
-                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
-                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
-                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
-                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
-                                <li><div>Pasta<p contentEditable={true}>20:21</p></div> <FontAwesomeIcon icon={faTrashCan} className={styles.deleteIcon} /></li>
-                                <div>
-                                </div>
-                            </ul>
-                        </div>
-                    </div>
-                    <div className={styles.meal_planner_chart}>
-                        <Bar options={timeChart} data={data2} />
-                        {/* <Doughnut data={donutData}></Doughnut> */}
-                    </div>
-                </div>
             </div>
 
             <div className={styles.weight_tracker_section}>
@@ -287,7 +296,6 @@ export default function Home() {
                             <div ref={weightsEndRef}>
                             </div>
                         </ul>
-                        <p className={styles.invisible_input}><input placeholder='Weight (lbs)'></input> <FontAwesomeIcon icon={faPlus} className={styles.addIcon} /> <FontAwesomeIcon icon={faFloppyDisk} className={styles.saveIcon} /></p>
                         <p className={styles.weight_list_input}><input placeholder='Weight (lbs)'></input> <FontAwesomeIcon icon={faPlus} className={styles.addIcon} /> <FontAwesomeIcon icon={faFloppyDisk} className={styles.saveIcon} /></p>
                     </div>
                     <div className={styles.weight_graph}>
