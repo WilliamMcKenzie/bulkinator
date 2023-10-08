@@ -1,9 +1,4 @@
 .main {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding-top: 2rem;
-    padding-left: 12vw;
     height: 100vh;
     width: 100vw;
     overflow-y: scroll;
@@ -12,6 +7,11 @@
     --border-color: #efefefee;
 
     background: rgb(242, 242, 242);
+}
+
+.overflow {
+    overflow-x: hidden !important;
+    text-overflow: ellipsis !important;
 }
 
 .meals_background {
@@ -263,13 +263,17 @@
 
 .recipes_container {
     display: flex;
+    flex-direction: column;
     align-items: flex-end;
-    background-color: white;
-    border: 2px solid var(--border-color);
-    border-right: none;
-    border-top-left-radius: 20px;
-    border-bottom-left-radius: 20px;
+    background-color: transparent;
     overflow-y: hidden;
+    z-index: 1;
+    margin: 1vw;
+    max-height: 90vh;
+    margin-left: auto;
+
+    position: sticky;
+    top: 10vh;
 }
 
 .recipes_list {
@@ -277,31 +281,22 @@
     min-width: 200px;
     margin-top: 30vh;
     height: 50vh;
+    padding: 2.5vh;
+    margin: 2.5vh;
+
+    padding-top: 0;
+    margin-top: 0;
+    padding-right: 0;
+    margin-right: 0;
+
     overflow-y: scroll;
+    overflow-x: hidden;
     position: relative;
 
     transition: 0.3s;
 }
 
-.recipes_list_full_view {
-    margin-top: 0vh !important;
-    height: 60vh !important;
-}
-
 .recipe_card {
-    margin: 10px;
-    overflow: hidden;
-    height: 100px;
-    width: 100px;
-    border-radius: 20px;
-
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
-    position: relative;
-
     transition: 0.3s;
 }
 
@@ -309,40 +304,14 @@
     position: absolute;
     width: 2rem;
     height: 2rem;
-    top: 10px;
+    bottom: 10px;
     right: 10px;
-    color: white;
+    z-index: 10;
+    color: rgb(60, 60, 60);
     visibility: hidden;
 }
 
-.recipe_card img {
-    height: 100px;
-    width: 100%;
-    margin: 0;
-    object-fit: cover;
-}
 
-.recipe_card_info {
-    background-color: white;
-    height: calc(100px - 5vh);
-    width: calc(100% - 5vh);
-    padding: 2.5vh;
-    margin: 0;
-    font-size: 0.7rem;
-}
-
-.recipe_card_info label {
-    width: 100%;
-    display: block;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    font-size: 0.8rem;
-    font-weight: 700;
-    margin-bottom: 10px;
-    margin-top: 10px;
-}
 
 
 .pages button {
@@ -474,7 +443,6 @@
     align-items: center;
     justify-content: center;
     background-color: white;
-    grid-area: header;
 }
 
 .weight_tracker_header h1 {
@@ -642,7 +610,7 @@
 
 /* Track */
 .recipes_list::-webkit-scrollbar-track {
-    background: var(--background-color);
+    background: transparent;
 }
 
 /* Handle */
@@ -717,19 +685,6 @@
     .recipe_card:hover {
         filter: brightness(0.95);
         cursor: pointer;
-        border-radius: 5px;
-    }
-
-    .recipe_card:hover img {
-        filter: brightness(0.5);
-    }
-
-    .recipe_card:hover .recipe_card_info {
-        filter: brightness(0.5);
-    }
-
-    .recipe_card:hover .bookmarkIcon {
-        visibility: visible;
     }
 
     .bookmarkIcon:hover {

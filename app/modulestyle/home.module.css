@@ -4,33 +4,9 @@
   justify-content: space-between;
   align-items: center;
   padding: 5rem;
+  padding-top: 0;
   max-height: 100vh;
   overflow-y: hidden;
-}
-
-.navbar_background {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  top: 0;
-
-  z-index: 1;
-  width: 100vw;
-  height: 10vh;
-
-  background-color: white;
-  border-bottom: 1px solid rgb(231, 231, 231);
-}
-
-.navbar {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  top: 0;
-
-  z-index: 2;
-  width: 80vw;
-  height: 10vh;
 }
 
 .auth_container {
@@ -168,12 +144,9 @@
   border-radius: 40px;
 }
 
-.center img {
-  width: 400px;
+.center svg {
   height: 250px;
   border-radius: 40px;
-  background-image: url('../images/salmon.jpg');
-  background-size: cover;
 }
 
 .center h1 {

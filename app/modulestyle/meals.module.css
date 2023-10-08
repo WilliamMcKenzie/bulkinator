@@ -6,7 +6,7 @@
     padding: 6rem;
     max-height: 100vh;
 
-    --primary: #2274A5;
+    --primary: #2196f3;
 }
 
 .meals_background {
@@ -54,7 +54,7 @@
 }
 
 .meals_header_contain_view {
-    height: 10vh !important;
+    height: 5vh !important;
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
 }
@@ -286,7 +286,7 @@
 
 .recipes_list_full_view {
     margin-top: 0vh !important;
-    height: 89vh !important;
+    height: 94vh !important;
 }
 
 .recipes_list::-webkit-scrollbar {}
