@@ -716,8 +716,29 @@
     .meal_component:hover {
         filter: brightness(0.9);
     }
+
     .deleteIcon:hover {
         color: #464646;
         cursor: pointer;
     }
+}
+
+@keyframes loading {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(360deg);
+    }
+
+    100% {
+        transform: rotate(720deg);
+    }
+}
+
+.loadingIcon {
+    animation-name: loading;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
 }

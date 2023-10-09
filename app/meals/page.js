@@ -104,38 +104,39 @@ export default function Home() {
             <div className={headerClass}>
                 <div className={styles.meals_header_background}></div>
                 <h1>Have a dish in mind?</h1>
-                <Paper>
-                    <TextField id="outlined-basic" label="Meal" variant="outlined"value={recipeInput}
+                <Paper sx={{ padding: 0.5, display: 'flex', alignItems: 'center', marginBottom: 5 }}>
+                    <TextField id="outlined-basic" label="Meal" variant="outlined" value={recipeInput}
                         onChange={e => {
                             setRecipeInput(e.currentTarget.value);
-                        }}></TextField>
+                        }}
+                        sx={{ margin: 1 }}></TextField>
 
-                        <FormControl>
-                            <InputLabel id="demo-simple-select-label">Diet</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={diet}
-                                label="Diet"
-                                onChange={handleChange}
-                            >
-                                <MenuItem value="balanced">Balanced</MenuItem>
-                                <MenuItem value="high-protein">High Protein</MenuItem>
-                                <MenuItem value="high-fiber">High Fiber</MenuItem>
-                                <MenuItem value="low-carb">Low Carb</MenuItem>
-                                <MenuItem value="low-fat">Low Fat</MenuItem>
-                            </Select>
-                        </FormControl>
-                        <IconButton onClick={async () => {
-                            const meals = await fetcher(`/api/meals?input=${recipeInput}&diet=${diet}`, false)
-                            setLastInput(recipeInput)
-                            if (meals._links.next) setNextLink(meals._links.next.href)
-                            else setNextLink(false)
-                            setRecipes([])
-                            setRecipes(oldArr => [...oldArr, meals.hits]);
-                        }}>
-                            <Search></Search>
-                        </IconButton>
+                    <FormControl sx={{ margin: 1 }}>
+                        <InputLabel id="demo-simple-select-label">Diet</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={diet}
+                            label="Diet"
+                            onChange={handleChange}
+                        >
+                            <MenuItem value="balanced">Balanced</MenuItem>
+                            <MenuItem value="high-protein">High Protein</MenuItem>
+                            <MenuItem value="high-fiber">High Fiber</MenuItem>
+                            <MenuItem value="low-carb">Low Carb</MenuItem>
+                            <MenuItem value="low-fat">Low Fat</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <IconButton sx={{ margin: 1 }} onClick={async () => {
+                        const meals = await fetcher(`/api/meals?input=${recipeInput}&diet=${diet}`, false)
+                        setLastInput(recipeInput)
+                        if (meals._links.next) setNextLink(meals._links.next.href)
+                        else setNextLink(false)
+                        setRecipes([])
+                        setRecipes(oldArr => [...oldArr, meals.hits]);
+                    }}>
+                        <Search></Search>
+                    </IconButton>
                 </Paper>
             </div>
             <div className={styles.recipes_container}>
@@ -147,43 +148,43 @@ export default function Home() {
                         <div className={styles.recipe_chunk} key={index} id={index.toString()}>
                             {recipeList.map((curRecipe, index) => (
                                 <Card sx={{ maxWidth: 345 }} className={addedRecipes[curRecipe.recipe.uri] ? styles.recipe_card_selected : styles.recipe_card}>
-                                <CardHeader sx={{width: '100%', overflow: 'hidden'}}
-                                  titleTypographyProps={{variant:'h8' }}
-                                  title={curRecipe.recipe.label.length > 25 ? curRecipe.recipe.label.substr(0, 25) + "..." : curRecipe.recipe.label}
-                                  subheaderTypographyProps={{variant:'subtitles10' }}
-                                  subheader={Math.round(curRecipe.recipe.calories) + " Calories"}
-                                />
-                                <CardMedia
-                                  component="img"
-                                  height="194"
-                                  image={curRecipe.recipe.image}
-                                  alt="food"
-                                />
-                                <CardActions disableSpacing>
-                                    {addedRecipes[curRecipe.recipe.uri] ? 
-                                    <IconButton aria-label='unadd to favorites'>
-                                        <Favorite onClick={async () => {
-                                            var url = encodeURIComponent(curRecipe.recipe.uri)
-                                            const unfavorite = await fetcher(`/api/unfavorite?url=${url}&id=64f7aec6d557116bbb8a6ca4`, false)
-                                            setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: false }))
-                                        }}/>
-                                    </IconButton>
-                                        :
-                                    <IconButton aria-label="add to favorites">
-                                        <FavoriteBorder onClick={async () => {
-                                            var url = encodeURIComponent(curRecipe.recipe.uri)
-                                                const favorite = await fetcher(`/api/favorite?url=${url}&id=64f7aec6d557116bbb8a6ca4`, false)
-                                                setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: true }))
-                                        }}/>
-                                    </IconButton>}
-                                  <IconButton aria-label="open in new tab">
-                                    <OpenInNew onClick={() => {
-                                        window.open(`/meals/${encodeURIComponent(curRecipe._links.self.href)}`)
-                                    }}/>
-                                  </IconButton>
-                                  <Rating name="no-value" value={null} sx={{marginLeft: 'auto'}}/>
-                                </CardActions>
-                              </Card>
+                                    <CardHeader sx={{ width: '100%', overflow: 'hidden' }}
+                                        titleTypographyProps={{ variant: 'h8' }}
+                                        title={curRecipe.recipe.label.length > 25 ? curRecipe.recipe.label.substr(0, 25) + "..." : curRecipe.recipe.label}
+                                        subheaderTypographyProps={{ variant: 'subtitles10' }}
+                                        subheader={Math.round(curRecipe.recipe.calories) + " Calories"}
+                                    />
+                                    <CardMedia
+                                        component="img"
+                                        height="194"
+                                        image={curRecipe.recipe.image}
+                                        alt="food"
+                                    />
+                                    <CardActions disableSpacing>
+                                        {addedRecipes[curRecipe.recipe.uri] ?
+                                            <IconButton aria-label='unadd to favorites'>
+                                                <Favorite onClick={async () => {
+                                                    var url = encodeURIComponent(curRecipe.recipe.uri)
+                                                    const unfavorite = await fetcher(`/api/unfavorite?url=${url}&id=64f7aec6d557116bbb8a6ca4`, false)
+                                                    setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: false }))
+                                                }} />
+                                            </IconButton>
+                                            :
+                                            <IconButton aria-label="add to favorites">
+                                                <FavoriteBorder onClick={async () => {
+                                                    var url = encodeURIComponent(curRecipe.recipe.uri)
+                                                    const favorite = await fetcher(`/api/favorite?url=${url}&id=64f7aec6d557116bbb8a6ca4`, false)
+                                                    setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: true }))
+                                                }} />
+                                            </IconButton>}
+                                        <IconButton aria-label="open in new tab">
+                                            <OpenInNew onClick={() => {
+                                                window.open(`/meals/${encodeURIComponent(curRecipe._links.self.href)}`)
+                                            }} />
+                                        </IconButton>
+                                        <Rating name="no-value" value={null} sx={{ marginLeft: 'auto' }} />
+                                    </CardActions>
+                                </Card>
                                 // <div key={index} className={styles.recipe_card}>
                                 //     <img src={curRecipe.recipe.image} className={addedRecipes[curRecipe.recipe.uri] ? styles.recipe_img_selected : ""} onClick={() => {
                                 //         window.open(`/meals/${encodeURIComponent(curRecipe._links.self.href)}`)
@@ -210,7 +211,7 @@ export default function Home() {
                         </div>
                     )) : <></>}
                     <div className={styles.pages} ref={loadRef}>
-                        {nextLink && lastInput ? <button onClick={loadMore}>Load More</button> : <></>}
+                        {nextLink && lastInput ? <Button onClick={loadMore} sx={{ marginTop: 1 }}>Load More</Button> : <></>}
                     </div>
                 </div>
             </div>

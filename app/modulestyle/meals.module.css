@@ -245,7 +245,7 @@
 .recipes_list {
     max-width: 100%;
     min-width: 500px;
-    margin-top: 30vh;
+    margin-top: 15vh;
     width: 80vw;
     height: 60vh;
     overflow-y: scroll;
@@ -255,8 +255,8 @@
 }
 
 .recipes_list_full_view {
-    margin-top: 0vh !important;
-    height: 94vh !important;
+    margin-top: -15vh !important;
+    height: 90vh !important;
 }
 
 .recipes_list::-webkit-scrollbar {}
@@ -324,17 +324,6 @@
 }
 
 
-.pages button {
-    color: white;
-    font-family: 'Inter';
-    font-weight: 700;
-    background-color: var(--primary);
-    padding: 15px;
-    border-radius: 20px;
-    border: 2px solid var(--primary);
-
-    transition: 0.3s;
-}
 
 /* width */
 .recipes_list::-webkit-scrollbar {
@@ -395,16 +384,9 @@
         cursor: pointer;
     }
 
-    .recipe_card:hover img {
-        filter: brightness(0.5);
-    }
-
-    .recipe_card:hover .recipe_card_info {
-        filter: brightness(0.5);
-    }
-
-    .recipe_card:hover .bookmarkIcon {
-        visibility: visible;
+    .recipe_card_selected:hover {
+        filter: brightness(0.85);
+        cursor: pointer;
     }
 
     .bookmarkIcon:hover {
@@ -413,12 +395,5 @@
 
     .bookmarkSelected:hover {
         color: rgb(144, 168, 218)
-    }
-
-    .pages button:hover {
-        background-color: white;
-        color: var(--primary);
-        border: 2px solid var(--primary);
-        cursor: pointer;
     }
 }
