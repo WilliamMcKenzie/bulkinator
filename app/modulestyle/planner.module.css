@@ -577,17 +577,6 @@
     font-family: 'Code';
 }
 
-.deleteIcon {
-    background-color: white;
-    color: var(--primary);
-    margin-left: auto;
-    padding: 15px;
-    font-size: 1rem;
-
-    border: 2px solid transparent;
-
-    transition: 0.3s;
-}
 
 .weight_graph {
     height: 50vh;
@@ -708,11 +697,6 @@
         cursor: pointer;
     }
 
-    .deleteIcon:hover {
-        border: 2px solid var(--primary);
-        cursor: pointer;
-    }
-
     .addIcon:hover {
         border: 2px solid var(--primary);
         cursor: pointer;
@@ -727,5 +711,13 @@
 
     .weight_list_input input:focus {
         border: 2px solid var(--primary);
+    }
+
+    .meal_component:hover {
+        filter: brightness(0.9);
+    }
+    .deleteIcon:hover {
+        color: #464646;
+        cursor: pointer;
     }
 }

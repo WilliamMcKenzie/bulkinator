@@ -28,11 +28,11 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import AddIcon from '@mui/icons-material/Add';
-import { Button, ButtonGroup, Checkbox, FormControlLabel, ImageList, ImageListItem, Paper, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
+import { Alert, Box, Button, ButtonGroup, Checkbox, Collapse, FormControlLabel, FormGroup, ImageList, ImageListItem, Modal, Paper, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
 
 //input 
 import TextField from '@mui/material/TextField';
-import { Delete, DeleteOutline, Egg, Fastfood, GrassOutlined, NoFood, RemoveCircle } from '@mui/icons-material';
+import { Close, Delete, DeleteOutline, Egg, Fastfood, GrassOutlined, NoFood, RemoveCircle } from '@mui/icons-material';
 
 const fetcher = (url, data) => {
     return axios.get(url, data).then(res => res.data);
@@ -85,11 +85,15 @@ export default function Home() {
         exclusive: true,
     };
 
+    const [selectedRecipe, setSelectedRecipe] = useState({})
+
     //include snacking
     const [checked, setChecked] = useState(true);
 
     const snackingChange = (event) => {
         setChecked(event.target.checked);
+        setSnack1Checked(false)
+        setSnack2Checked(false)
     };
 
     //init
@@ -182,25 +186,129 @@ export default function Home() {
 
     const planMeal = async () => {
         
-        if(calories){
+        setAlertOpen(false)
+        setSuccessOpen(false)
+
+        if(calories > 500){
+            setAlertOpen(true)
             setGenerated(true)
             var meals = await fetcher(`/api/plan?calories=${calories}&snacking=${checked}&diet=${diet}`, false)
 
-            var newBreakfast = meals.breakfast.hits[Math.round(Math.random()*meals.breakfast.hits.length-1)].recipe
+            var newBreakfast = meals.breakfast.hits[Math.round(Math.random()*meals.breakfast.hits.length-1)]
             setBreakfast([newBreakfast])
-            setBreakfastServings([Math.round(calorieChart.breakfast/newBreakfast.calories*100)/100])
+            setBreakfastServings([Math.round(calorieChart.breakfast/newBreakfast.recipe.calories*100)/100])
             
-            var newLunch = meals.lunch.hits[Math.round(Math.random()*meals.lunch.hits.length)].recipe
+            var newLunch = meals.lunch.hits[Math.round(Math.random()*meals.lunch.hits.length)]
             setLunch([newLunch])
+            setLunchServings([Math.round(calorieChart.lunch/newLunch.calories*100)/100])
 
-            setDinner([meals.dinner.hits[Math.round(Math.random()*meals.dinner.hits.length)].recipe])
+            var newDinner = meals.dinner.hits[Math.round(Math.random()*meals.dinner.hits.length)]
+            setDinner([newDinner])
+            setDinnerServings([Math.round(calorieChart.dinner/newDinner.calories*100)/100])
 
             if(checked){
-                setSnack1([meals.snack1.hits[Math.round(Math.random()*meals.snack1.hits.length)].recipe])
-                setSnack2([meals.snack2.hits[Math.round(Math.random()*meals.snack2.hits.length)].recipe])
+                setSnack1([meals.snack1.hits[Math.round(Math.random()*meals.snack1.hits.length)]])
+                setSnack2([meals.snack2.hits[Math.round(Math.random()*meals.snack2.hits.length)]])
             }
+        } else {
+            setSuccessOpen(true)
         }
     }
+
+    //handle the modal
+
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
+    const [breakfastChecked, setBreakfastChecked] = useState(false);
+    const [snack1Checked, setSnack1Checked] = useState(false);
+    const [lunchChecked, setLunchChecked] = useState(false);
+    const [snack2Checked, setSnack2Checked] = useState(false);
+    const [dinnerChecked, setDinnerChecked] = useState(false);
+
+    const handleModalChange = (event) => {
+
+        if(event.target.id == "breakfast"){
+            setBreakfastChecked(event.target.checked)
+        }
+        if(event.target.id == "snack1"){
+            setSnack1Checked(event.target.checked)
+        }
+        if(event.target.id == "lunch"){
+            setLunchChecked(event.target.checked)
+        }
+        if(event.target.id == "snack2"){
+            setSnack2Checked(event.target.checked)
+        }
+        if(event.target.id == "dinner"){
+            setDinnerChecked(event.target.checked)
+        }
+    };
+
+    const handleModalDone = (event) => {
+
+        var tempSelected = selectedRecipe
+        tempSelected.isAdded = true
+        setSelectedRecipe(tempSelected)
+
+        if(breakfastChecked){
+            var temp = [...breakfast]
+            temp.push(selectedRecipe)
+            setBreakfast(temp)
+
+            var servingsTemp = breakfastServings
+            servingsTemp.push(1)
+            setBreakfastServings(servingsTemp)
+        }
+        if(snack1Checked){
+            var temp = [...snack1]
+            temp.push(selectedRecipe)
+            setSnack1(temp)
+
+            var servingsTemp = snack1Servings
+            servingsTemp.push(1)
+            setSnack1Servings(servingsTemp)
+        }
+        if(lunchChecked){
+            var temp = [...lunch]
+            temp.push(selectedRecipe)
+            setLunch(temp)
+
+            var servingsTemp = lunchServings
+            servingsTemp.push(1)
+            setLunchServings(servingsTemp)
+        }
+        if(snack2Checked){
+            var temp = [...snack2]
+            temp.push(selectedRecipe)
+            setSnack2(temp)
+
+            var servingsTemp = snack2Servings
+            servingsTemp.push(1)
+            setSnack2Servings(servingsTemp)
+        }
+        if(dinner){
+            var temp = [...dinner]
+            temp.push(selectedRecipe)
+            setDinner(temp)
+
+            var servingsTemp = dinnerServings
+            servingsTemp.push(1)
+            setDinnerServings(servingsTemp)
+        }
+
+        setSnack1Checked(false)
+        setSnack2Checked(false)
+        setBreakfastChecked(false)
+        setLunchChecked(false)
+        setDinnerChecked(false)
+
+        handleClose()
+    };
+
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [successOpen, setSuccessOpen] = useState(false);
 
 
 
@@ -219,7 +327,7 @@ export default function Home() {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    <Typography variant='h4' sx={{marginBottom: 'auto', paddingBottom: '5vh'}}>
+                    <Typography variant='h3' sx={{marginBottom: 'auto', paddingBottom: '5vh'}}>
                         What is your diet?
                     </Typography>   
                     <Typography variant='subtitle1' sx={{marginBottom: 'auto', width: '60%', textAlign: 'center', paddingBottom: '5vh'}}>
@@ -241,6 +349,47 @@ export default function Home() {
                                 <ToggleButton value="low-sugar">Low Sugar<NoFood sx={{marginleft:'5px'}}></NoFood></ToggleButton>
                             </ToggleButtonGroup >
                         </div>
+                        <Box sx={{ width: '100%' }}>
+                            <Collapse in={successOpen}>
+                                <Alert
+                                severity="error"
+                                action={
+                                    <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setSuccessOpen(false);
+                                    }}
+                                    >
+                                    <Close fontSize="inherit" />
+                                    </IconButton>
+                                }
+                                sx={{ mb: 2 }}
+                                >
+                                Error
+                                </Alert>
+                            </Collapse>
+                            <Collapse in={alertOpen}>
+                                <Alert
+                                action={
+                                    <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setAlertOpen(false);
+                                    }}
+                                    >
+                                    <Close fontSize="inherit" />
+                                    </IconButton>
+                                }
+                                sx={{ mb: 2 }}
+                                >
+                                Success!
+                                </Alert>
+                            </Collapse>
+                        </Box>
                         <div style={{
                             width: '80%',
                             height: 'fit-content',
@@ -290,26 +439,29 @@ export default function Home() {
                                 Breakfast
                             </Typography>
                             <Typography variant="subtitle1" component="subtitle1">
-                                {breakfastServings[1] ? Math.round(breakfastServings.reduce((accumulator, cur, i) => parseInt(i == 1 ? accumulator*breakfast[0].calories : accumulator) + cur*breakfast[i].calories)) : breakfastServings[0] ? Math.round(breakfastServings[0]*breakfast[0].calories) : breakfast[0] ? Math.round(calorieChart.breakfast) : 0   } {" Calories"}
+                                {breakfastServings[1] && breakfastServings[0] ? Math.round(breakfastServings.reduce((accumulator, cur, i) => parseInt(i == 1 ? accumulator*breakfast[0].recipe.calories : accumulator) + cur*breakfast[i].recipe.calories)) : breakfastServings[0] ? Math.round(breakfastServings[0]*breakfast[0].recipe.calories) : breakfast[0] ? Math.round(calorieChart.breakfast) : 0   } {" Calories"}
                             </Typography>
 
                             {breakfast.length >= 0 ? breakfast.map((curMeal, index) => (
                                     <>
-                                    <Paper sx={{width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px'}}>
+                                    <Paper className={styles.meal_component} sx={{width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px'}}>
                                         <img
-                                            srcSet={curMeal.image}
-                                            src={curMeal.image}
+                                            srcSet={curMeal.recipe.image}
+                                            src={curMeal.recipe.image}
                                             alt={'food'}
                                             style={{
                                                 width: '8vh',
                                                 height: '8vh',
                                                 borderRadius: '10px'
                                             }}
+                                            onClick={()=>{
+                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}`)
+                                            }}
                                             loading="lazy"
                                         />
                                         <div style={{display: 'flex', flexDirection: 'column', marginLeft: '10px'}}>
                                             <Typography variant="h6" component="subtitle1" fontSize={16}>
-                                                {curMeal.label}
+                                                {curMeal.recipe.label}
                                             </Typography>
                                             <TextField
                                                     id="breakfast"
@@ -322,10 +474,10 @@ export default function Home() {
                                                       variant="filled"
                                                     name={index}
                                                     onChange={servingHandeler}
-                                                    defaultValue={Math.round(calorieChart.breakfast/curMeal.calories*100)/100}
+                                                    defaultValue={curMeal.isAdded ? 1 : Math.round(calorieChart.breakfast/curMeal.recipe.calories*100)/100}
                                             />
                                         </div>
-                                        <Delete sx={{marginLeft: 'auto'}} onClick={() => {
+                                        <Delete className={styles.deleteIcon} sx={{marginLeft: 'auto'}} onClick={() => {
                                             var temp = [...breakfast]
                                             temp.splice(index, 1);
                                             setBreakfast(temp)
@@ -343,26 +495,29 @@ export default function Home() {
                                 Snack 1
                             </Typography>
                             <Typography variant="subtitle1" component="subtitle1">
-                                {snack1Servings[1] ? Math.round(snack1Servings.reduce((accumulator, cur, i) => parseInt(i == 1 ? accumulator*snack1[0].calories : accumulator) + cur*snack1[i].calories)) : snack1Servings[0] ? Math.round(snack1Servings[0]*snack1[0].calories) : snack1[0] ? Math.round(calorieChart.snack1) : 0   } {" Calories"}
+                                {snack1Servings[1] && snack1Servings[0] ? Math.round(snack1Servings.reduce((accumulator, cur, i) => parseInt(i == 1 ? accumulator*snack1[0].recipe.calories : accumulator) + cur*snack1[i].recipe.calories)) : snack1Servings[0] ? Math.round(snack1Servings[0]*snack1[0].recipe.calories) : snack1[0] ? Math.round(calorieChart.snack1) : 0   } {" Calories"}
                             </Typography>
 
                             {snack1.length >= 0 ? snack1.map((curMeal, index) => (
                                     <>
-                                    <Paper sx={{width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px'}}>
+                                    <Paper className={styles.meal_component} sx={{width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px'}}>
                                         <img
-                                            srcSet={curMeal.image}
-                                            src={curMeal.image}
+                                            srcSet={curMeal.recipe.image}
+                                            src={curMeal.recipe.image}
                                             alt={'food'}
                                             style={{
                                                 width: '8vh',
                                                 height: '8vh',
                                                 borderRadius: '10px'
                                             }}
+                                            onClick={()=>{
+                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}`)
+                                            }}
                                             loading="lazy"
                                         />
                                         <div style={{display: 'flex', flexDirection: 'column', marginLeft: '10px'}}>
                                             <Typography variant="h6" component="subtitle1" fontSize={16}>
-                                                {curMeal.label}
+                                                {curMeal.recipe.label}
                                             </Typography>
                                             <TextField
                                                     id="snack1"
@@ -375,10 +530,10 @@ export default function Home() {
                                                       variant="filled"
                                                     name={index}
                                                     onChange={servingHandeler}
-                                                    defaultValue={Math.round(calorieChart.snack1/curMeal.calories*100)/100}
+                                                    defaultValue={Math.round(calorieChart.snack1/curMeal.recipe.calories*100)/100}
                                             />
                                         </div>
-                                        <Delete sx={{marginLeft: 'auto'}} onClick={() => {
+                                        <Delete className={styles.deleteIcon} sx={{marginLeft: 'auto'}} onClick={() => {
                                             var temp = [...snack1]
                                             temp.splice(index, 1);
                                             setSnack1(temp)
@@ -396,26 +551,29 @@ export default function Home() {
                                 Lunch
                             </Typography>
                             <Typography variant="subtitle1" component="subtitle1">
-                                {lunchServings[1] ? Math.round(lunchServings.reduce((accumulator, cur, i) => parseInt(i == 1 ? accumulator*lunch[0].calories : accumulator) + cur*lunch[i].calories)) : lunchServings[0] ? Math.round(lunchServings[0]*lunch[0].calories) : lunch[0] ? Math.round(calorieChart.lunch) : 0} {" Calories"}
+                                {lunchServings[1] && lunchServings[0] ? Math.round(lunchServings.reduce((accumulator, cur, i) => parseInt(i == 1 ? accumulator*lunch[0].recipe.calories : accumulator) + cur*lunch[i].recipe.calories)) : lunchServings[0] ? Math.round(lunchServings[0]*lunch[0].recipe.calories) : lunch[0] ? Math.round(calorieChart.lunch) : 0} {" Calories"}
                             </Typography>
 
                             {lunch.length >= 0 ? lunch.map((curMeal, index) => (
                                     <>
-                                    <Paper sx={{width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px'}}>
+                                    <Paper className={styles.meal_component} sx={{width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px'}}>
                                         <img
-                                            srcSet={curMeal.image}
-                                            src={curMeal.image}
+                                            srcSet={curMeal.recipe.image}
+                                            src={curMeal.recipe.image}
                                             alt={'food'}
                                             style={{
                                                 width: '8vh',
                                                 height: '8vh',
                                                 borderRadius: '10px'
                                             }}
+                                            onClick={()=>{
+                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}`)
+                                            }}
                                             loading="lazy"
                                         />
                                         <div style={{display: 'flex', flexDirection: 'column', marginLeft: '10px'}}>
                                             <Typography variant="h6" component="subtitle1" fontSize={16}>
-                                                {curMeal.label}
+                                                {curMeal.recipe.label}
                                             </Typography>
                                             <TextField
                                                     id="lunch"
@@ -428,10 +586,10 @@ export default function Home() {
                                                       variant="filled"
                                                     name={index}
                                                     onChange={servingHandeler}
-                                                    defaultValue={Math.round(calorieChart.lunch/curMeal.calories*100)/100}
+                                                    defaultValue={Math.round(calorieChart.lunch/curMeal.recipe.calories*100)/100}
                                             />
                                         </div>
-                                        <Delete sx={{marginLeft: 'auto'}} onClick={() => {
+                                        <Delete className={styles.deleteIcon} sx={{marginLeft: 'auto'}} onClick={() => {
                                             var temp = [...lunch]
                                             temp.splice(index, 1);
                                             setLunch(temp)
@@ -449,26 +607,29 @@ export default function Home() {
                                 Snack 2
                             </Typography>
                             <Typography variant="subtitle1" component="subtitle1">
-                                {snack2Servings[1] ? Math.round(snack2Servings.reduce((accumulator, cur, i) => parseInt(i == 1 ? accumulator*snack2[0].calories : accumulator) + cur*snack2[i].calories)) : snack2Servings[0] ? Math.round(snack2Servings[0]*snack2[0].calories) : snack2[0] ? Math.round(calorieChart.snack2) : 0   } {" Calories"}
+                                {snack2Servings[1] && snack2Servings[0] ? Math.round(snack2Servings.reduce((accumulator, cur, i) => parseInt(i == 1 ? accumulator*snack2[0].recipe.calories : accumulator) + cur*snack2[i].recipe.calories)) : snack2Servings[0] ? Math.round(snack2Servings[0]*snack2[0].recipe.calories) : snack2[0] ? Math.round(calorieChart.snack2) : 0   } {" Calories"}
                             </Typography>
 
                             {snack2.length >= 0 ? snack2.map((curMeal, index) => (
                                     <>
-                                    <Paper sx={{width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px'}}>
+                                    <Paper className={styles.meal_component} sx={{width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px'}}>
                                         <img
-                                            srcSet={curMeal.image}
-                                            src={curMeal.image}
+                                            srcSet={curMeal.recipe.image}
+                                            src={curMeal.recipe.image}
                                             alt={'food'}
                                             style={{
                                                 width: '8vh',
                                                 height: '8vh',
                                                 borderRadius: '10px'
                                             }}
+                                            onClick={()=>{
+                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}`)
+                                            }}
                                             loading="lazy"
                                         />
                                         <div style={{display: 'flex', flexDirection: 'column', marginLeft: '10px'}}>
                                             <Typography variant="h6" component="subtitle1" fontSize={16}>
-                                                {curMeal.label}
+                                                {curMeal.recipe.label}
                                             </Typography>
                                             <TextField
                                                     id="snack2"
@@ -481,10 +642,10 @@ export default function Home() {
                                                       variant="filled"
                                                     name={index}
                                                     onChange={servingHandeler}
-                                                    defaultValue={Math.round(calorieChart.snack2/curMeal.calories*100)/100}
+                                                    defaultValue={Math.round(calorieChart.snack2/curMeal.recipe.calories*100)/100}
                                             />
                                         </div>
-                                        <Delete sx={{marginLeft: 'auto'}} onClick={() => {
+                                        <Delete className={styles.deleteIcon} sx={{marginLeft: 'auto'}} onClick={() => {
                                             var temp = [...snack2]
                                             temp.splice(index, 1);
                                             setSnack2(temp)
@@ -502,15 +663,18 @@ export default function Home() {
                                 Dinner
                             </Typography>
                             <Typography variant="subtitle1" component="subtitle1">
-                                {dinnerServings[1] ? Math.round(dinnerServings.reduce((accumulator, cur, i) => parseInt(i == 1 ? accumulator*dinner[0].calories : accumulator) + cur*dinner[i].calories)) : dinnerServings[0] ? Math.round(dinnerServings[0]*dinner[0].calories) : dinner[0] ? Math.round(calorieChart.dinner) : 0} {" Calories"}
+                            {dinnerServings[1] && dinnerServings[0] ? Math.round(dinnerServings.reduce((accumulator, cur, i) => parseInt(i == 1 ? accumulator*dinner[0].recipe.calories : accumulator) + cur*dinner[i].recipe.calories)) : dinnerServings[0] ? Math.round(dinnerServings[0]*dinner[0].recipe.calories) : dinner[0] ? Math.round(calorieChart.dinner) : 0   } {" Calories"}
                             </Typography>
 
                             {dinner.length >= 0 ? dinner.map((curMeal, index) => (
                                     <>
-                                    <Paper sx={{width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px'}}>
+                                    <Paper className={styles.meal_component} sx={{width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px'}}>
                                         <img
-                                            srcSet={curMeal.image}
-                                            src={curMeal.image}
+                                            srcSet={curMeal.recipe.image}
+                                            src={curMeal.recipe.image}
+                                            onClick={()=>{
+                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}`)
+                                            }}
                                             alt={'food'}
                                             style={{
                                                 width: '8vh',
@@ -521,7 +685,7 @@ export default function Home() {
                                         />
                                         <div style={{display: 'flex', flexDirection: 'column', marginLeft: '10px'}}>
                                             <Typography variant="h6" component="subtitle1" fontSize={16}>
-                                                {curMeal.label}
+                                                {curMeal.recipe.label}
                                             </Typography>
                                             <TextField
                                                     id="dinner"
@@ -534,15 +698,15 @@ export default function Home() {
                                                       variant="filled"
                                                     name={index}
                                                     onChange={servingHandeler}
-                                                    defaultValue={Math.round(calorieChart.dinner/curMeal.calories*100)/100}
+                                                    defaultValue={Math.round(calorieChart.dinner/curMeal.recipe.calories*100)/100}
                                             />
                                         </div>
-                                        <Delete sx={{marginLeft: 'auto'}} onClick={() => {
+                                        <Delete className={styles.deleteIcon} sx={{marginLeft: 'auto'}} onClick={() => {
                                             var temp = [...dinner]
                                             temp.splice(index, 1);
                                             setDinner(temp)
 
-                                            var tempServings = [...dinner]
+                                            var tempServings = [...dinnerServings]
                                             tempServings.splice(index, 1);
                                             setDinnerServings(tempServings)
                                         }}></Delete>
@@ -567,13 +731,8 @@ export default function Home() {
                                             alt={curRecipe.recipe.label}
                                             loading="lazy"
                                             onClick={() => {
-                                                var temp = [...breakfast]
-                                                temp.push(curRecipe.recipe)
-                                                setBreakfast(temp)
-
-                                                var servingsTemp = breakfastServings
-                                                servingsTemp.push(Math.round(calorieChart.breakfast/curRecipe.recipe.calories*100)/100)
-                                                setBreakfastServings(servingsTemp)
+                                                handleOpen()
+                                                setSelectedRecipe(curRecipe)
                                             }}
                                         />
                                         </ImageListItem>))}
@@ -583,6 +742,34 @@ export default function Home() {
                         </Paper>
                     </div>
             </div> : <></>}
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={{position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 400,
+                    bgcolor: 'background.paper',
+                    border: '2px solid #000',
+                    boxShadow: 24,
+                    p: 4,}}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                    Add to meal:
+                </Typography>
+                <FormGroup sx={{mt:2}}>
+                    <FormControlLabel control={<Checkbox id="breakfast" checked={breakfastChecked} onChange={handleModalChange} />} label="Breakfast" />
+                    {checked ? <FormControlLabel control={<Checkbox id="snack1" checked={snack1Checked} onChange={handleModalChange}/>} label="Snack 1" /> : <FormControlLabel disabled control={<Checkbox id="snack1" checked={snack1Checked} onChange={handleModalChange}/>} label="Snack 1" />}
+                    <FormControlLabel control={<Checkbox id="lunch" checked={lunchChecked} onChange={handleModalChange}/>} label="Lunch" />
+                    {checked ? <FormControlLabel control={<Checkbox id="snack2" checked={snack2Checked} onChange={handleModalChange}/>} label="Snack 2" /> :  <FormControlLabel disabled control={<Checkbox id="snack2" checked={snack2Checked} onChange={handleModalChange}/>} label="Snack 2" />}
+                    <FormControlLabel control={<Checkbox id="dinner" checked={dinnerChecked} onChange={handleModalChange}/>} label="Dinner" />
+                    <Button onClick={handleModalDone}>Done</Button>
+                </FormGroup>
+                </Box>
+            </Modal>
         </ThemeProvider>
     </main>)
 }

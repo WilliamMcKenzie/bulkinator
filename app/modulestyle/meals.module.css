@@ -70,32 +70,19 @@
 
 .meals_input {
     width: fit-content;
-    background-color: white;
-    padding: 2px;
+    padding: 1vh;
     margin-bottom: 5vh;
-    border-radius: 20px;
-
-    display: flex;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
+    border-radius: 10px;
+    background-color: white;
 
     transition: 1s;
 }
 
 .meals_input input {
-    outline: none;
-    border: none;
-    border-radius: 18px;
-    border: 2px solid transparent;
-
-    font-family: 'Inter';
-    font-size: 1rem;
-    padding-left: 10px;
     width: 20vw;
     height: 90%;
-
-    transition: 0.3s;
+    border: 0;
+    outline: 0;
 }
 
 .searchIcon {
@@ -130,23 +117,6 @@
     transition: 0.3s;
 }
 
-.tagButton select {
-    border: none;
-    outline: none;
-    height: 100%;
-    color: white;
-    font-family: 'Inter';
-    background-color: transparent;
-
-    transition: 0.3s;
-}
-
-.tagButton select option {
-    color: rgb(50, 50, 50);
-    background-color: white;
-    border: none;
-    outline: none;
-}
 
 .tagButton div h1 {
     color: rgb(33, 33, 33);
@@ -292,34 +262,12 @@
 .recipes_list::-webkit-scrollbar {}
 
 .recipe_card {
-    margin: 10px;
-    overflow: hidden;
-    height: 375px;
-    border-radius: 20px;
-
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
-    position: relative;
-
-    transition: 0.3s;
+    margin: 5px;
 }
 
 .recipe_card_selected {
-    margin: 10px;
-    overflow: hidden;
-    height: 375px;
-    border-radius: 20px;
-
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content: flex-start;
-    align-items: center;
-
-    transition: 0.3s;
+    filter: brightness(0.9);
+    margin: 5px;
 }
 
 .bookmarkIcon {
@@ -341,17 +289,6 @@
     color: rgb(201, 219, 255);
     visibility: visible !important;
     z-index: 5;
-}
-
-.recipe_card img {
-    height: 225px;
-    width: 100%;
-    margin: 0;
-    object-fit: cover;
-}
-
-.recipe_img_selected {
-    filter: brightness(0.5) !important;
 }
 
 .recipe_card_info {
@@ -450,11 +387,6 @@
         background-color: white;
         color: var(--primary);
         border: 2px solid var(--primary);
-        cursor: pointer;
-    }
-
-    .tagButton:hover select {
-        color: var(--primary);
         cursor: pointer;
     }
 
