@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
     const queryParams = {
         app_id: appId,
         app_key: apiKey,
+        diet: 'high-protein'
     };
 
     const breakfast = await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&calories=${Math.round(calorieChart.breakfast-50)}-${Math.round(calorieChart.breakfast+50)}&q=${diet=="vegan" ? "banana" : "egg"}&${diet != "" ? `health=${diet}` : ""}`, {
