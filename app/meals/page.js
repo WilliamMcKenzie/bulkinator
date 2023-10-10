@@ -104,7 +104,7 @@ export default function Home() {
             <div className={headerClass}>
                 <div className={styles.meals_header_background}></div>
                 <h1>Have a dish in mind?</h1>
-                <Paper sx={{ padding: 0.5, display: 'flex', alignItems: 'center', marginBottom: 5 }}>
+                <div style={{ padding: 0.5, display: 'flex', alignItems: 'center', marginBottom: 5 }}>
                     <TextField id="outlined-basic" label="Meal" variant="outlined" value={recipeInput}
                         onChange={e => {
                             setRecipeInput(e.currentTarget.value);
@@ -137,7 +137,7 @@ export default function Home() {
                     }}>
                         <Search></Search>
                     </IconButton>
-                </Paper>
+                </div>
             </div>
             <div className={styles.recipes_container}>
                 <div className={recipeListClass}>
