@@ -24,7 +24,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import AddIcon from '@mui/icons-material/Add';
 import { Alert, Avatar, Box, Button, ButtonGroup, Checkbox, Collapse, FormControl, FormControlLabel, FormGroup, ImageList, ImageListItem, InputLabel, MenuItem, Modal, Paper, Rating, Select, TextField, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
-import { Favorite, FavoriteBorder, OpenInBrowser, OpenInNew, Search } from '@mui/icons-material';
+import { Bookmark, BookmarkBorder, Favorite, FavoriteBorder, OpenInBrowser, OpenInNew, Search } from '@mui/icons-material';
 
 
 const fetcher = (url, data) => {
@@ -163,7 +163,7 @@ export default function Home() {
                                     <CardActions disableSpacing>
                                         {addedRecipes[curRecipe.recipe.uri] ?
                                             <IconButton aria-label='unadd to favorites'>
-                                                <Favorite onClick={async () => {
+                                                <Bookmark sx={{color:'#2196f3'}} onClick={async () => {
                                                     var url = encodeURIComponent(curRecipe.recipe.uri)
                                                     const unfavorite = await fetcher(`/api/unfavorite?url=${url}&id=64f7aec6d557116bbb8a6ca4`, false)
                                                     setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: false }))
@@ -171,7 +171,7 @@ export default function Home() {
                                             </IconButton>
                                             :
                                             <IconButton aria-label="add to favorites">
-                                                <FavoriteBorder onClick={async () => {
+                                                <BookmarkBorder onClick={async () => {
                                                     var url = encodeURIComponent(curRecipe.recipe.uri)
                                                     const favorite = await fetcher(`/api/favorite?url=${url}&id=64f7aec6d557116bbb8a6ca4`, false)
                                                     setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: true }))

@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClockRotateLeft } from '@fortawesome/free-solid-svg-icons'
 import styles from './meal.module.css'
 import axios from "axios";
+import DrawerAppBar from 'app/components/Navbar.js'
+import { IconButton, Paper, Rating } from '@mui/material'
+import { Bookmark, BookmarkBorder } from '@mui/icons-material'
 
 
 const fetcher = (url, data) => {
@@ -13,40 +16,49 @@ const fetcher = (url, data) => {
 
 export default function Page({ params }) {
     var [recipe, setRecipe] = useState(false);
+    var [addedRecipes, setAddedRecipes] = useState(false);
 
     useEffect(() => {
 
         async function initRecipe() {
             var myRecipe = await fetcher(`/api/meal?url=${params.id}`, false)
             setRecipe(myRecipe)
-            console.log(recipe)
+            const getAddedRecipes = await fetcher(`/api/getRecipes?id=64f7aec6d557116bbb8a6ca4`, false)
+
+            getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
         }
         initRecipe()
         return () => { }
     }, [])
 
     return <main className={styles.main}>
-        <div className={styles.navbar}>
-            <a className={styles.logo_container} href='./'>
-                <img src="data:image/gif;base64,R0lGODlhAQABAPcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEAAP8ALAAAAAABAAEAAAgEAP8FBAA7"></img>
-                BULKINATOR
-            </a>
-            <div className={styles.auth_container}>
-                <a className={styles.login} href="./login">
-                    Login
-                </a>
-                <a className={styles.register} href="./register">
-                    Register
-                </a>
-            </div>
-        </div>
-        <div className={styles.meals_header_background}></div>
+        <DrawerAppBar></DrawerAppBar>
         {recipe ?
             <div className={styles.recipe}>
-                <div className={styles.recipe_card}>
+                <Paper className={styles.recipe_card}>
                     <img src={recipe.recipe.images.LARGE ? recipe.recipe.images.LARGE.url : recipe.recipe.images.REGULAR.url}></img>
                     <div className={styles.recipe_card_content}>
                         <h1>{recipe.recipe.label}</h1>
+                        <div style={{display: 'flex', alignItems: 'center'}}>
+                        {addedRecipes[recipe.recipe.uri] ?
+                                            <IconButton aria-label='unadd to favorites'>
+                                                <Bookmark sx={{color:'#2196f3'}} onClick={async () => {
+                                                    var url = encodeURIComponent(recipe.recipe.uri)
+                                                    const unfavorite = await fetcher(`/api/unfavorite?url=${url}&id=64f7aec6d557116bbb8a6ca4`, false)
+                                                    setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.recipe.uri]: false }))
+                                                }} />
+                                            </IconButton>
+                                            :
+                                            <IconButton aria-label="add to favorites">
+                                                <BookmarkBorder onClick={async () => {
+                                                    var url = encodeURIComponent(recipe.recipe.uri)
+                                                    const favorite = await fetcher(`/api/favorite?url=${url}&id=64f7aec6d557116bbb8a6ca4`, false)
+                                                    setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.recipe.uri]: true }))
+                                                }} />
+                                            </IconButton>}
+                                            <Rating name="no-value" value={null}/>
+
+                        </div>
                         <p>Find the full recipe at <a href={recipe.recipe.url}>{recipe.recipe.source}</a></p>
                         <div className={styles.quick_macros}>
                             <p>{(Math.round(parseInt(recipe.recipe.calories))) + " calories"}</p>
@@ -57,8 +69,8 @@ export default function Page({ params }) {
                             <p><FontAwesomeIcon icon={faClockRotateLeft}></FontAwesomeIcon> {" " + recipe.recipe.totalTime + "m"}</p>
                         </div>
                     </div>
-                </div>
-                <div className={styles.full_details}>
+                </Paper>
+                <Paper className={styles.full_details}>
                     <div className={styles.ingredients}>
                         <h1>Ingredients</h1>
                         {recipe.recipe.ingredientLines.map((curRecipe, index) => (
@@ -82,7 +94,7 @@ export default function Page({ params }) {
                         <p>Sodium <a>{" " + (Math.round(parseInt(recipe.recipe.totalNutrients.NA.quantity))) + recipe.recipe.totalNutrients.NA.unit}</a></p>
                         <p></p>
                     </div>
-                </div>
+                </Paper>
             </div> : <></>}
 
     </main>
