@@ -33,6 +33,11 @@ a {
 }
 
 @font-face {
+  font-family: 'Roboto';
+  src: url('./Inter.ttf');
+}
+
+@font-face {
   font-family: 'Code';
   src: url('./JetBrainsMono-Regular.ttf');
 }
