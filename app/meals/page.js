@@ -75,7 +75,9 @@ export default function Home() {
 
             const getAddedRecipes = await fetcher(`/api/getRecipes?id=64f7aec6d557116bbb8a6ca4`, false)
 
-            getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
+            if (getAddedRecipes) {
+                getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
+            }
         }
 
         init()
@@ -163,7 +165,7 @@ export default function Home() {
                                     <CardActions disableSpacing>
                                         {addedRecipes[curRecipe.recipe.uri] ?
                                             <IconButton aria-label='unadd to favorites'>
-                                                <Bookmark sx={{color:'#2196f3'}} onClick={async () => {
+                                                <Bookmark sx={{ color: '#2196f3' }} onClick={async () => {
                                                     var url = encodeURIComponent(curRecipe.recipe.uri)
                                                     const unfavorite = await fetcher(`/api/unfavorite?url=${url}&id=64f7aec6d557116bbb8a6ca4`, false)
                                                     setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: false }))

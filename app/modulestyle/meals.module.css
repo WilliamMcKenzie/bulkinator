@@ -4,6 +4,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 6rem;
+    padding-top: 0;
     max-height: 100vh;
 
     --primary: #2196f3;
@@ -241,7 +242,8 @@
     max-width: 100%;
     min-width: 500px;
     width: 80vw;
-    height: 75vh;
+    height: 72vh;
+    margin-top: 28vh;
     overflow-y: scroll;
     position: relative;
 
@@ -249,7 +251,7 @@
 }
 
 .recipes_list_full_view {
-    margin-top: -15vh !important;
+    margin-top: 10vh !important;
     height: 85vh !important;
 }
 
