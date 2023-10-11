@@ -17,13 +17,14 @@ model User {
   email String @unique
   role String @default("BASIC")
   userID String[] @db.ObjectId
-  recipes Recipe[] @relation(fields: [userID], references: [id])
+  recipes Recipe[] @relation( fields: [userID], references: [id])
 }
 
 model Recipe {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   url String
   likes Int
+  
   recipeID String[] @db.ObjectId
   users User[] @relation(fields: [recipeID], references: [id])
 }

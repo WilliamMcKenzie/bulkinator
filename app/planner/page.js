@@ -189,6 +189,11 @@ export default function Home() {
             setLoading(true)
             var meals = await fetcher(`/api/plan?calories=${calories}&snacking=${checked}&diet=${diet}`, false)
 
+            if(meals.message){
+                setSuccessOpen(true)
+                setLoading(false)
+                 return
+            }
             if (!meals.breakfast.hits[0] || !meals.breakfast.hits[0].recipe || !meals.lunch.hits[0] || !meals.lunch.hits[0].recipe || !meals.dinner.hits[0] || !meals.dinner.hits[0].recipe) {
                 setSuccessOpen(true)
                 setLoading(false)
@@ -208,11 +213,11 @@ export default function Home() {
 
             var newLunch = meals.lunch.hits[Math.round(Math.random() * meals.lunch.hits.length - 1)]
             setLunch([newLunch])
-            setLunchServings([Math.round(calorieChart.lunch / newLunch.calories * 100) / 100])
+            setLunchServings([Math.round(calorieChart.lunch / newLunch.recipe.calories * 100) / 100])
 
             var newDinner = meals.dinner.hits[Math.round(Math.random() * meals.dinner.hits.length - 1)]
             setDinner([newDinner])
-            setDinnerServings([Math.round(calorieChart.dinner / newDinner.calories * 100) / 100])
+            setDinnerServings([Math.round(calorieChart.dinner / newDinner.recipe.calories * 100) / 100])
 
             if (checked) {
                 setSnack1([meals.snack1.hits[Math.round(Math.random() * meals.snack1.hits.length - 1)]])

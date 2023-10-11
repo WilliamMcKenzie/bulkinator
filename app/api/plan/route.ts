@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { resolve } from 'path/posix'
 
 export async function GET(request: NextRequest) {
-    const searchParams = request.nextUrl.searchParams
+const searchParams = request.nextUrl.searchParams
     const totalCals = parseInt(searchParams.get('calories'))
     const snacking = searchParams.get('snacking')
     const diet = searchParams.get('diet')
@@ -31,7 +31,6 @@ export async function GET(request: NextRequest) {
     const queryParams = {
         app_id: appId,
         app_key: apiKey,
-        diet: 'high-protein'
     };
 
     const breakfast = await axios.get(`https://api.edamam.com/api/recipes/v2?type=public&calories=${Math.round(calorieChart.breakfast-50)}-${Math.round(calorieChart.breakfast+50)}&q=${diet=="vegan" ? "banana" : "egg"}&${diet != "" ? `health=${diet}` : ""}`, {
@@ -55,7 +54,7 @@ export async function GET(request: NextRequest) {
 
     if(snacking == "true"){
 
-        var snacks = ['cracker', 'peanut', 'apple', 'milkshake']
+        var snacks = ['cracker', 'peanut', 'apple', 'protein']
         var snacks1 = snacks[Math.floor(Math.random()*snacks.length)]
         var snacks2 = snacks[Math.floor(Math.random()*snacks.length)]
 
@@ -72,4 +71,5 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(res)
+    
 }

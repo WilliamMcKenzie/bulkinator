@@ -10,6 +10,7 @@
           "width: fit-content"
         ]
       }
-    ]
+    ],
+    "typescript-config/strict": "off"
   }
 }
