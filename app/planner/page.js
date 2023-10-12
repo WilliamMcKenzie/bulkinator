@@ -36,6 +36,7 @@ const fetcher = (url, data) => {
 export default function Home() {
 
     const [_, forceUpdate] = useReducer((x) => x + 1, 0);
+    var [curId, setCurId] = useState('6526c9f4f6ee11fa75b2e3d5')
 
     //theme
     const lightTheme = createMuiTheme({
@@ -104,7 +105,7 @@ export default function Home() {
         setRecipes([])
 
         async function init() {
-            var meals = await fetcher(`/api/getFavoritedRecipes?id=64f7aec6d557116bbb8a6ca4`, false)
+            var meals = await fetcher(`/api/getFavoritedRecipes?id=${curId}`, false)
             meals.forEach(recipe => setRecipes(recipes => [...recipes, recipe.hits]))
             scrollTo(weightsEndRef)
         }
@@ -189,6 +190,11 @@ export default function Home() {
             setLoading(true)
             var meals = await fetcher(`/api/plan?calories=${calories}&snacking=${checked}&diet=${diet}`, false)
 
+            if(meals.message){
+                setSuccessOpen(true)
+                setLoading(false)
+                 return
+            }
             if (!meals.breakfast.hits[0] || !meals.breakfast.hits[0].recipe || !meals.lunch.hits[0] || !meals.lunch.hits[0].recipe || !meals.dinner.hits[0] || !meals.dinner.hits[0].recipe) {
                 setSuccessOpen(true)
                 setLoading(false)
@@ -208,11 +214,11 @@ export default function Home() {
 
             var newLunch = meals.lunch.hits[Math.round(Math.random() * meals.lunch.hits.length - 1)]
             setLunch([newLunch])
-            setLunchServings([Math.round(calorieChart.lunch / newLunch.calories * 100) / 100])
+            setLunchServings([Math.round(calorieChart.lunch / newLunch.recipe.calories * 100) / 100])
 
             var newDinner = meals.dinner.hits[Math.round(Math.random() * meals.dinner.hits.length - 1)]
             setDinner([newDinner])
-            setDinnerServings([Math.round(calorieChart.dinner / newDinner.calories * 100) / 100])
+            setDinnerServings([Math.round(calorieChart.dinner / newDinner.recipe.calories * 100) / 100])
 
             if (checked) {
                 setSnack1([meals.snack1.hits[Math.round(Math.random() * meals.snack1.hits.length - 1)]])

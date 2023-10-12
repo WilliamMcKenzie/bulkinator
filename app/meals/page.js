@@ -35,6 +35,8 @@ export default function Home() {
 
     var [addedRecipes, setAddedRecipes] = useState({})
 
+    const [curId, setCurId] = useState('6525cc4cb23307fe32b6b006')
+
     const recipeRef = useRef();
     const loadRef = useRef();
 
@@ -73,7 +75,7 @@ export default function Home() {
             }
             else setNextLink(false)
 
-            const getAddedRecipes = await fetcher(`/api/getRecipes?id=64f7aec6d557116bbb8a6ca4`, false)
+            const getAddedRecipes = await fetcher(`/api/getRecipes?id=${curId}`, false)
 
             if (getAddedRecipes) {
                 getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
@@ -167,16 +169,16 @@ export default function Home() {
                                             <IconButton aria-label='unadd to favorites'>
                                                 <Bookmark sx={{ color: '#2196f3' }} onClick={async () => {
                                                     var url = encodeURIComponent(curRecipe.recipe.uri)
-                                                    const unfavorite = await fetcher(`/api/unfavorite?url=${url}&id=64f7aec6d557116bbb8a6ca4`, false)
                                                     setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: false }))
+                                                    const unfavorite = await fetcher(`/api/unfavorite?url=${url}&id=${curId}`, false)
                                                 }} />
                                             </IconButton>
                                             :
                                             <IconButton aria-label="add to favorites">
                                                 <BookmarkBorder onClick={async () => {
                                                     var url = encodeURIComponent(curRecipe.recipe.uri)
-                                                    const favorite = await fetcher(`/api/favorite?url=${url}&id=64f7aec6d557116bbb8a6ca4`, false)
                                                     setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: true }))
+                                                    const favorite = await fetcher(`/api/favorite?url=${url}&id=${curId}`, false)
                                                 }} />
                                             </IconButton>}
                                         <IconButton aria-label="open in new tab">
@@ -184,8 +186,7 @@ export default function Home() {
                                                 window.open(`/meals/${encodeURIComponent(curRecipe._links.self.href)}`)
                                             }} />
                                         </IconButton>
-                                        <Rating name="no-value" value={null} sx={{ marginLeft: 'auto' }} />
-                                    </CardActions>
+                                        </CardActions>
                                 </Card>
                                 // <div key={index} className={styles.recipe_card}>
                                 //     <img src={curRecipe.recipe.image} className={addedRecipes[curRecipe.recipe.uri] ? styles.recipe_img_selected : ""} onClick={() => {
