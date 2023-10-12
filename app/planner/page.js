@@ -36,6 +36,7 @@ const fetcher = (url, data) => {
 export default function Home() {
 
     const [_, forceUpdate] = useReducer((x) => x + 1, 0);
+    var [curId, setCurId] = useState('6526c9f4f6ee11fa75b2e3d5')
 
     //theme
     const lightTheme = createMuiTheme({
@@ -104,7 +105,7 @@ export default function Home() {
         setRecipes([])
 
         async function init() {
-            var meals = await fetcher(`/api/getFavoritedRecipes?id=64f7aec6d557116bbb8a6ca4`, false)
+            var meals = await fetcher(`/api/getFavoritedRecipes?id=${curId}`, false)
             meals.forEach(recipe => setRecipes(recipes => [...recipes, recipe.hits]))
             scrollTo(weightsEndRef)
         }

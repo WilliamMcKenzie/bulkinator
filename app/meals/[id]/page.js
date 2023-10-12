@@ -6,8 +6,8 @@ import { faClockRotateLeft } from '@fortawesome/free-solid-svg-icons'
 import styles from './meal.module.css'
 import axios from "axios";
 import DrawerAppBar from 'app/components/Navbar.js'
-import { Chip, IconButton, Paper, Rating } from '@mui/material'
-import { AccessAlarm, AccessAlarms, Bookmark, BookmarkBorder } from '@mui/icons-material'
+import { Alert, Badge, Box, Button, Chip, Collapse, IconButton, Paper, Rating } from '@mui/material'
+import { AccessAlarm, AccessAlarms, Bookmark, BookmarkBorder, Close, HourglassEmpty } from '@mui/icons-material'
 import EnhancedTable from '../../components/EnhancedTable'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -26,11 +26,13 @@ const fetcher = (url, data) => {
 
 export default function Page({ params }) {
     var [recipe, setRecipe] = useState(false);
-    var [curId, setCurId] = useState('6525cc4cb23307fe32b6b006')
+    var [curId, setCurId] = useState('6526c9f4f6ee11fa75b2e3d5')
     var [addedRecipes, setAddedRecipes] = useState(false);
 
     var [row, setRows] = useState(createData('Frozen yoghurt', 159, 6.0, 24, 4.0))
+    var [likes, setLikes] = useState(0)
 
+    const [inProcess, setProcess] = useState(false)
     
 
     useEffect(() => {
@@ -41,7 +43,8 @@ export default function Page({ params }) {
             const getAddedRecipes = await fetcher(`/api/getRecipes?id=${curId}`, false)
 
             getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
-
+            const getLikes = await fetcher(`/api/likeCount?uri=${encodeURIComponent(myRecipe.recipe.uri)}`, false)
+            setLikes(getLikes ? getLikes.users.length : 0)
             setRows(createData(myRecipe.recipe.label, Math.round(parseInt(myRecipe.recipe.calories)), Math.round(parseInt(myRecipe.recipe.totalNutrients.FAT.quantity)), Math.round(parseInt(myRecipe.recipe.totalNutrients.CHOCDF.quantity)), Math.round(parseInt(myRecipe.recipe.totalNutrients.PROCNT.quantity))))
         }
         initRecipe()
@@ -57,40 +60,39 @@ export default function Page({ params }) {
                     <div className={styles.recipe_card_content}>
                         <h1>{recipe.recipe.label}</h1>
                         <div style={{display: 'flex', alignItems: 'center'}}>
-                        {addedRecipes[recipe.recipe.uri] ?
-                                            <IconButton aria-label='unadd to favorites'>
-                                                <Bookmark sx={{color:'#2196f3'}} onClick={async () => {
+                        {inProcess ? <Button startIcon={<HourglassEmpty color='primary' className={styles.loadingIcon}></HourglassEmpty>}></Button> : addedRecipes[recipe.recipe.uri] ?
+                                            <Button startIcon={<Bookmark></Bookmark>} onClick={async () => {
+                                                if(inProcess == false){
+                                                    setProcess(true)
                                                     var url = encodeURIComponent(recipe.recipe.uri)
+                                                    setLikes(likes-1);
                                                     setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.recipe.uri]: false }))
                                                     const unfavorite = await fetcher(`/api/unfavorite?url=${url}&id=${curId}`, false)
-                                                }} />
-                                            </IconButton>
+                                                    setProcess(false)
+                                                }
+                                            }}>{likes}</Button>
                                             :
-                                            <IconButton aria-label="add to favorites">
-                                                <BookmarkBorder onClick={async () => {
+                                            <Button startIcon={<BookmarkBorder></BookmarkBorder>} onClick={async () => {
+                                                if(inProcess == false){
+                                                    setProcess(true)
                                                     var url = encodeURIComponent(recipe.recipe.uri)
+                                                    setLikes(likes+1);
                                                     setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.recipe.uri]: true }))
                                                     const favorite = await fetcher(`/api/favorite?url=${url}&id=${curId}`, false)
-                                                
-                                                }} />
-                                            </IconButton>}
+                                                    setProcess(false)
+                                                }
+                                            }}>
+                                                {likes}
+                                            </Button>
+                                            }
                                             {recipe.recipe.dietLabels.map((label, index) => (
-                                                <Chip label={label} variant="outlined" sx={{marginRight: '5px'}}/>
+                                                 <Chip label={label} sx={{marginRight: '10px'}} variant={addedRecipes[recipe.recipe.uri] ? '' : 'outlined'} />
                                             ))}
                                             <p style={{display: 'flex', margin: 0, alignItems:'center', color:'rgb(100 100 100 / 87%)'}}><AccessAlarms sx={{color: 'rgb(100 100 100 / 87%)'}}></AccessAlarms> {" " + recipe.recipe.totalTime + "m"}</p>
-                                            
+                                
                         </div>
                         <p>Find the full recipe at <a href={recipe.recipe.url}>{recipe.recipe.source}</a></p>
-                        <div className={styles.quick_macros}>
-                            <p>{(Math.round(parseInt(recipe.recipe.calories))) + " calories"}</p>
-                            <p>{(Math.round(parseInt(recipe.recipe.totalNutrients.PROCNT.quantity))) + "g protein"}</p>
-                            <p>{(Math.round(parseInt(recipe.recipe.totalNutrients.FAT.quantity))) + "g fat"}</p>
-                            <p>{(Math.round(parseInt(recipe.recipe.totalNutrients.CHOCDF.quantity))) + "g carbs"}</p>
-                            <p>{(Math.round(parseInt(recipe.recipe.totalNutrients.SUGAR.quantity))) + "g sugars"}</p>
-                        </div>
-                    </div>
-                </Paper>
-                <TableContainer component={Paper} sx={{ marginTop: '2rem' }}>
+                        <TableContainer component={Paper} sx={{ marginTop: '2rem' }}>
                     <Table aria-label="simple table">
                         <TableHead>
                         <TableRow>
@@ -117,6 +119,17 @@ export default function Page({ params }) {
                         </TableBody>
                     </Table>
                 </TableContainer>
+
+                        <div className={styles.quick_macros}>
+                            {/* <p>{(Math.round(parseInt(recipe.recipe.calories))) + " calories"}</p>
+                            <p>{(Math.round(parseInt(recipe.recipe.totalNutrients.PROCNT.quantity))) + "g protein"}</p>
+                            <p>{(Math.round(parseInt(recipe.recipe.totalNutrients.FAT.quantity))) + "g fat"}</p>
+                            <p>{(Math.round(parseInt(recipe.recipe.totalNutrients.CHOCDF.quantity))) + "g carbs"}</p>
+                            <p>{(Math.round(parseInt(recipe.recipe.totalNutrients.SUGAR.quantity))) + "g sugars"}</p> */}
+                        </div>
+                    </div>
+                </Paper>
+            
                 <Paper className={styles.full_details}>
                     <div className={styles.ingredients}>
                         <h1>Ingredients</h1>
