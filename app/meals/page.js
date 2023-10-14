@@ -80,10 +80,11 @@ export default function Home() {
             }
             else setNextLink(false)
 
-
             if(curId != "null"){
              const getAddedRecipes = await fetcher(`/api/getRecipes?id=${params.get("id")}`, false)
              getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
+            if (getAddedRecipes) {
+                getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
             }
         }
         init()
@@ -196,7 +197,7 @@ export default function Home() {
                                     <CardActions disableSpacing>
                                         {addedRecipes[curRecipe.recipe.uri] ?
                                             <IconButton aria-label='unadd to favorites'>
-                                                <Bookmark sx={{color:'#2196f3'}} onClick={async () => {
+                                                <Bookmark sx={{ color: '#2196f3' }} onClick={async () => {
                                                     var url = encodeURIComponent(curRecipe.recipe.uri)
                                                     setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: false }))
                                                     const unfavorite = await fetcher(`/api/unfavorite?url=${url}&id=${curId}`, false)
