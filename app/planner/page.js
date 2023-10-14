@@ -27,16 +27,20 @@ import { Alert, Box, Button, ButtonGroup, Checkbox, Collapse, FormControlLabel, 
 
 //input 
 import TextField from '@mui/material/TextField';
-import { Close, Delete, DeleteOutline, Egg, Fastfood, GrassOutlined, HourglassEmpty, NoFood, RemoveCircle } from '@mui/icons-material';
+import { Check, Close, Delete, DeleteOutline, Egg, Fastfood, GrassOutlined, HourglassEmpty, NoFood, RemoveCircle, Save } from '@mui/icons-material';
 
 const fetcher = (url, data) => {
-    return axios.get(url, data).then(res => res.data);
+    if(data){
+        return axios.post(url, data).then(res => res.data);
+    } else{
+        return axios.get(url, data).then(res => res.data);
+    }
 };
 
 export default function Home() {
 
     const [_, forceUpdate] = useReducer((x) => x + 1, 0);
-    var [curId, setCurId] = useState('6526c9f4f6ee11fa75b2e3d5')
+    var [curId, setCurId] = useState('')
 
     //theme
     const lightTheme = createMuiTheme({
@@ -99,33 +103,6 @@ export default function Home() {
         setHeaderClass(cn(styles.meals_header, styles.meals_header_contain_view))
     }, []);
 
-    useEffect(() => {
-        var meals
-
-        setRecipes([])
-
-        async function init() {
-            var meals = await fetcher(`/api/getFavoritedRecipes?id=${curId}`, false)
-            meals.forEach(recipe => setRecipes(recipes => [...recipes, recipe.hits]))
-            scrollTo(weightsEndRef)
-        }
-
-        init()
-    }, [])
-
-    //fetch meal plan
-
-    var totalCals = calories
-    var calorieChart = { breakfast: 0, lunch: 0, dinner: 0, snack1: 0, snack2: 0 }
-
-    if (checked) {
-        var cals = [totalCals / 3, totalCals / 1.5]
-        calorieChart = { breakfast: cals[1] / 3, snack1: cals[0] / 2, lunch: cals[1] / 3, snack2: cals[0] / 2, dinner: cals[1] / 3 }
-    } else {
-        var cals = [totalCals]
-        calorieChart = { breakfast: cals[0] / 3, lunch: cals[0] / 3, dinner: cals[0] / 3, snack1: 0, snack2: 0 }
-    }
-
     const [breakfast, setBreakfast] = useState([])
     const [breakfastServings, setBreakfastServings] = useState([])
 
@@ -140,6 +117,93 @@ export default function Home() {
 
     const [snack2, setSnack2] = useState([])
     const [snack2Servings, setSnack2Servings] = useState([])
+
+    useEffect(() => {
+
+        setRecipes([])
+
+        async function init() {
+            let params = (new URL(document.location)).searchParams;
+            var id = params.get("id")
+
+            setCurId(id)
+            if(id){
+                var user = await fetcher(`/api/getPlan?id=${id}`)
+                if (user.plan.date == (new Date).getDate()){
+                    setBreakfast(user.plan.breakfast.recipes)
+                    setBreakfastServings(user.plan.breakfast.servings)
+
+                    setLunch(user.plan.lunch.recipes)
+                    setLunchServings(user.plan.lunch.servings)
+
+                    setDinner(user.plan.dinner.recipes)
+                    setDinnerServings(user.plan.dinner.servings)
+
+                    if(user.plan.snack1.recipes != []){
+                        setSnack1(user.plan.snack1.recipes)
+                        setSnack1Servings(user.plan.snack1.servings)
+
+                        setSnack2(user.plan.snack2.recipes)
+                        setSnack2Servings(user.plan.snack2.servings)
+                    }
+
+                    var meals = await fetcher(`/api/getFavoritedRecipes?id=${id}`, false)
+                    setRecipes([])
+                    meals.forEach(recipe => setRecipes(recipes => [...recipes, recipe.hits]))
+
+                    setGenerated(true)
+                }
+            }
+        }
+        
+
+        init()
+    }, [])
+
+    
+
+    //fetch meal plan
+
+    var totalCals = calories
+    var calorieChart = { breakfast: 0, lunch: 0, dinner: 0, snack1: 0, snack2: 0 }
+
+    if (checked) {
+        var cals = [totalCals / 3, totalCals / 1.5]
+        calorieChart = { breakfast: cals[1] / 3, snack1: cals[0] / 2, lunch: cals[1] / 3, snack2: cals[0] / 2, dinner: cals[1] / 3 }
+    } else {
+        var cals = [totalCals]
+        calorieChart = { breakfast: cals[0] / 3, lunch: cals[0] / 3, dinner: cals[0] / 3, snack1: 0, snack2: 0 }
+    }
+
+    //saveButton
+    const [savePopup, setSavePopup] = useState(false)
+
+    var breakfastJSON = {
+        recipes: breakfast,
+        servings: breakfastServings
+    }
+    var snack1JSON = {
+        recipes: snack1,
+        servings: snack1Servings
+    }
+    var lunchJSON = {
+        recipes: lunch,
+        servings: lunchServings
+    }
+    var snack2JSON = {
+        recipes: snack2,
+        servings: snack2Servings
+    }
+    var dinnerJSON = {
+        recipes: dinner,
+        servings: dinnerServings
+    }
+
+
+    const save = async () => {
+        var uploadPlan = await fetcher(`/api/uploadPlan`, {breakfast: breakfastJSON, snack1: snack1JSON, lunch: lunchJSON, snack2: snack2JSON, dinner: dinnerJSON, id: curId})
+        setSavePopup(false)
+    }
 
     //set servings
     const [hasBeenEdited, setHasBeenEdited] = useState([])
@@ -185,9 +249,13 @@ export default function Home() {
 
         setAlertOpen(false)
         setSuccessOpen(false)
+        setLoading(true)
+
+        setRecipes([])
+        var meals = await fetcher(`/api/getFavoritedRecipes?id=${curId}`, false)
+        meals.forEach(recipe => setRecipes(recipes => [...recipes, recipe.hits]))
 
         if (calories > 500) {
-            setLoading(true)
             var meals = await fetcher(`/api/plan?calories=${calories}&snacking=${checked}&diet=${diet}`, false)
 
             if(meals.message){
@@ -227,6 +295,7 @@ export default function Home() {
             setLoading(false)
             setAlertOpen(true)
             setGenerated(true)
+            setSavePopup(true)
         } else {
             setSuccessOpen(true)
         }
@@ -327,11 +396,9 @@ export default function Home() {
     const [alertOpen, setAlertOpen] = useState(false);
     const [successOpen, setSuccessOpen] = useState(false);
 
-
-
     return (<main className={styles.main}>
         <ThemeProvider theme={lightTheme}>
-            <DrawerAppBar />
+            <DrawerAppBar id={curId}/>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{
                     width: 'calc(100% - 440px)',
@@ -461,7 +528,7 @@ export default function Home() {
 
                             {breakfast.length >= 0 ? breakfast.map((curMeal, index) => (
                                 <>
-                                    <Paper className={styles.meal_component} sx={{ width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                                    <Paper className={styles.meal_component} sx={{  height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
                                         <img
                                             srcSet={curMeal.recipe.image}
                                             src={curMeal.recipe.image}
@@ -517,7 +584,7 @@ export default function Home() {
 
                             {snack1.length >= 0 ? snack1.map((curMeal, index) => (
                                 <>
-                                    <Paper className={styles.meal_component} sx={{ width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                                    <Paper className={styles.meal_component} sx={{ height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
                                         <img
                                             srcSet={curMeal.recipe.image}
                                             src={curMeal.recipe.image}
@@ -573,7 +640,7 @@ export default function Home() {
 
                             {lunch.length >= 0 ? lunch.map((curMeal, index) => (
                                 <>
-                                    <Paper className={styles.meal_component} sx={{ width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                                    <Paper className={styles.meal_component} sx={{ height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
                                         <img
                                             srcSet={curMeal.recipe.image}
                                             src={curMeal.recipe.image}
@@ -629,7 +696,7 @@ export default function Home() {
 
                             {snack2.length >= 0 ? snack2.map((curMeal, index) => (
                                 <>
-                                    <Paper className={styles.meal_component} sx={{ width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                                    <Paper className={styles.meal_component} sx={{ height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
                                         <img
                                             srcSet={curMeal.recipe.image}
                                             src={curMeal.recipe.image}
@@ -675,7 +742,7 @@ export default function Home() {
                                 </>
                             )) : <></>}
                         </Paper> : <></>}
-                        <Paper sx={{ width: '50vw', height: 'fit-content', padding: '2vh', marginTop: '10px' }}>
+                        <Paper sx={{ width: '50vw', marginBottom: '6rem', height: 'fit-content', padding: '2vh', marginTop: '10px' }}>
                             <Typography variant="h6" component="h3">
                                 Dinner
                             </Typography>
@@ -685,7 +752,7 @@ export default function Home() {
 
                             {dinner.length >= 0 ? dinner.map((curMeal, index) => (
                                 <>
-                                    <Paper className={styles.meal_component} sx={{ width: '100%', height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+                                    <Paper className={styles.meal_component} sx={{ height: '15vh', padding: '2vh', display: 'flex', alignItems: 'center', marginTop: '10px' }}>
                                         <img
                                             srcSet={curMeal.recipe.image}
                                             src={curMeal.recipe.image}
@@ -789,6 +856,21 @@ export default function Home() {
                     </FormGroup>
                 </Box>
             </Modal>
+            <Collapse in={savePopup}>
+                <Alert sx={{position: 'absolute', bottom:'10px', left:'50%', transform: 'translate(-50%, 0)'}} action={
+                                            <IconButton
+                                                aria-label="close"
+                                                color="inherit"
+                                                size="small"
+                                                onClick={save}
+                                            >
+                                                <Check fontSize="inherit" />
+                                            </IconButton>
+                                        } severity="info">
+                Do you want to save this plan?
+                </Alert>                 
+           </Collapse>
+            
         </ThemeProvider>
     </main>)
 }

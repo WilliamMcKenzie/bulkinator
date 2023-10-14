@@ -89,6 +89,7 @@
 }
 
 .recipe_card {
+    margin-top: 6rem;
     display: flex;
     border-radius: 20px;
     border-bottom-left-radius: 0;

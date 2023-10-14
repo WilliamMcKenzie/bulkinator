@@ -29,7 +29,7 @@ export default function Page({ params }) {
     var [curId, setCurId] = useState('6526c9f4f6ee11fa75b2e3d5')
     var [addedRecipes, setAddedRecipes] = useState(false);
 
-    var [row, setRows] = useState(createData('Frozen yoghurt', 159, 6.0, 24, 4.0))
+    var [row, setRows] = useState(createData('Loading...', 0, 0, 0, 0))
     var [likes, setLikes] = useState(0)
 
     const [inProcess, setProcess] = useState(false)

@@ -21,36 +21,7 @@ const drawerWidth = 240;
 const navItems = ['Home', 'Meals', 'Planner'];
 
 function DrawerAppBar(props) {
-    const { window } = props;
-    const [mobileOpen, setMobileOpen] = React.useState(false);
 
-    const handleDrawerToggle = () => {
-        setMobileOpen((prevState) => !prevState);
-    };
-
-    const drawer = (
-        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            <svg width="200" height="40" viewBox="0 0 370 80.04033809215585" class="css-1j8o68f"><defs id="SvgjsDefs1443"></defs><g id="SvgjsG1444" featurekey="symbolFeature-0" transform="matrix(0.9070944561495645,0,0,0.9070944561495645,-16.113201978060374,-4.535472280747823)" fill="#FFFFFF"><path xmlns="http://www.w3.org/2000/svg" d="M56.411,21.984C56.411,21.984,66.6,5,73.393,5l1.133,1.132c0,0-13.586,11.322-13.586,14.719L56.411,21.984z"></path><path xmlns="http://www.w3.org/2000/svg" d="M73.773,82.981c0,0,15.101,9.904,20.68,7.211l0.48-1.381c0,0-15.646-3.908-16.992-6.698L73.773,82.981z"></path><path xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-miterlimit="10" d="M24.197,57.618c0,0,2.6-1.558,2.604-1.561  c0.957-0.577,1.681-3.614,2.502-4.579c7.2-8.451,21.473-5.477,29.313,0.182c7.298,5.265,10.088,15.289,17.652,20.02  c0,0,6.249,7.81,1.041,9.373c0,0,0.521,2.082-1.041,2.082c0,0-1.563,0.52-1.043,1.562c0,0,0.524,1.044-1.039,1.044  c0,0,3.123,5.205-4.687,6.246c-14.775,1.971-36.298,3.306-46.938-9.709c-2.265-2.769-4.437-7.125-4.756-10.746  c-0.191-2.174,0.286-4.239,1.259-6.184c0.834-1.671,2.364-2.781,3.412-4.286C22.895,60.461,23.73,57.897,24.197,57.618z"></path><g xmlns="http://www.w3.org/2000/svg"><path d="M78.122,80.354c0,0-1.267,0.432-1.122,1.286c0.428-0.417,0.837-0.853,1.225-1.304   C78.187,80.34,78.163,80.354,78.122,80.354z"></path><path d="M79.967,77.932c-0.231,0.134-0.497,0.249-0.805,0.342c0,0,0.083,0.353,0.078,0.766   C79.496,78.681,79.738,78.311,79.967,77.932z"></path><path d="M77.426,57.047c-2.765-5.154-3.52-9.26-3.653-15.1c-0.248-10.635-6.454-25.632-19.978-20.372   c-5.827,2.267-8.463,7.785-10.142,13.423c-0.947,3.179-1.9,6.007-3.136,8.685c6.874-1.079,14.801,1.48,19.953,5.198   c7.297,5.265,10.087,15.288,17.652,20.02c0,0,2.936,3.671,3.104,6.482c0.48-1.228,0.825-2.532,1.001-3.917   C82.927,65.967,79.888,61.639,77.426,57.047z"></path></g><path xmlns="http://www.w3.org/2000/svg" d="M50.268,67.09c-0.622,0.833-1.246-0.936-2.786-2.088c-1.539-1.152-3.414-1.253-2.789-2.086c0,0,2.537-0.788,4.077,0.366  C50.31,64.434,50.268,67.09,50.268,67.09z"></path><path xmlns="http://www.w3.org/2000/svg" d="M47.064,73.174c0.459-0.934-1.397-0.691-3.123-1.546c-1.724-0.851-2.659-2.476-3.121-1.542c0,0,0.444,2.62,2.167,3.473  C44.714,74.409,47.064,73.174,47.064,73.174z"></path><g xmlns="http://www.w3.org/2000/svg"><path d="M25.518,57.345c4.262,1.676,8.43,3.541,12.564,5.477c4.139,1.925,8.221,3.964,12.285,6.039   c4.047,2.108,8.076,4.253,12.033,6.537c1.984,1.132,3.944,2.308,5.888,3.517c0.964,0.617,1.931,1.229,2.876,1.88   c0.472,0.326,0.941,0.655,1.402,0.999c0.229,0.176,0.454,0.354,0.674,0.54c0.11,0.094,0.218,0.189,0.321,0.292   c0.083,0.104,0.243,0.207,0.213,0.356c0.006-0.141-0.163-0.214-0.262-0.299c-0.116-0.081-0.237-0.154-0.36-0.227   c-0.245-0.143-0.496-0.276-0.748-0.408c-0.502-0.267-1.01-0.524-1.521-0.775l-3.071-1.5l-6.144-2.997   c-4.097-1.999-8.159-4.063-12.217-6.139c-4.042-2.108-8.081-4.221-12.073-6.43C33.379,62.011,29.408,59.76,25.518,57.345z"></path></g><g xmlns="http://www.w3.org/2000/svg"><path d="M32.922,58.826c2.251-1.805,5.344-2.538,8.309-2.269c3,0.249,5.826,1.539,8.216,3.252c2.383,1.75,4.393,3.909,6.06,6.265   c1.674,2.353,3.042,4.891,4.069,7.561c-1.752-2.261-3.453-4.502-5.293-6.592c-1.849-2.074-3.802-4.036-6.008-5.614   c-2.18-1.603-4.628-2.808-7.258-3.331C38.394,57.595,35.572,57.764,32.922,58.826z"></path></g><g xmlns="http://www.w3.org/2000/svg"><path d="M31.441,61.788c-0.735,1.632-1.139,3.397-1.009,5.082c0.104,1.688,0.832,3.222,1.955,4.401   c1.135,1.175,2.578,2.078,4.14,2.75c1.555,0.69,3.212,1.21,4.907,1.602c3.384,0.832,6.899,1.254,10.425,1.612   c3.533,0.337,7.094,0.547,10.681,0.842c-3.56,0.537-7.157,0.765-10.766,0.717c-3.608-0.046-7.236-0.388-10.811-1.228   c-1.777-0.453-3.549-1.012-5.236-1.835c-1.665-0.839-3.308-1.905-4.519-3.446c-1.244-1.505-1.894-3.516-1.753-5.414   C29.601,64.975,30.326,63.204,31.441,61.788z" ></path></g></g></svg>
-            <Typography variant="h6" sx={{
-                my: 2, fontFamily: 'monospace',
-                fontWeight: 700, letterSpacing: '.3rem',
-            }}>
-                Bulkinator
-            </Typography>
-            <Divider />
-            <List>
-                {navItems.map((item) => (
-                    <ListItem key={item} disablePadding>
-                        <ListItemButton sx={{ textAlign: 'center' }}>
-                            <ListItemText primary={item} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-        </Box>
-    );
-
-    const container = window !== undefined ? () => window().document.body : undefined;
 
     const lightTheme = createMuiTheme({
         palette: {
@@ -65,15 +36,12 @@ function DrawerAppBar(props) {
 
     return (
         <ThemeProvider theme={lightTheme}>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
-                <AppBar component="nav">
+            <AppBar component="nav">
                     <Toolbar>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
                             edge="start"
-                            onClick={handleDrawerToggle}
                             sx={{ mr: 2, display: { sm: 'none' } }}
                         >
                             <MenuIcon />
@@ -94,6 +62,15 @@ function DrawerAppBar(props) {
                                 BULKINATOR
                             </Typography>
                         </a>
+                        {props.id == null ? <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            {navItems.map((item) => (
+                                <Button key={item} sx={{ color: '#fff' }} onClick={() => {
+                                    location.href = item == 'Home' ? `/?id=${props.id}` : `/${item.toLowerCase()}?id=${props.id}`
+                                }}>
+                                    {item}
+                                </Button>
+                            ))}
+                        </Box> : <></>}
                         <Typography
                             variant="h6"
                             component="div"
@@ -106,48 +83,31 @@ function DrawerAppBar(props) {
                             }}
                         >
                         </Typography>
-                        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        {props.id == null ? <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                                <Button sx={{ color: '#fff' }} onClick={() => {
+                                    location.href = '/login'
+                                }}>
+                                    Login
+                                </Button>
+                                <Button sx={{ color: '#fff' }} onClick={() => {
+                                    location.href = '/register'
+                                }}>
+                                    Register
+                                </Button>
+                        </Box> :  <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
                             {navItems.map((item) => (
                                 <Button key={item} sx={{ color: '#fff' }} onClick={() => {
-                                    location.href = item == 'Home' ? `./` : `./${item.toLowerCase()}`
+                                location.href = item == 'Home' ? `/?id=${props.id}` : `/${item.toLowerCase()}?id=${props.id}`
                                 }}>
                                     {item}
                                 </Button>
                             ))}
-                        </Box>
+                        </Box>}
+                        
                     </Toolbar>
                 </AppBar>
-                <nav>
-                    <Drawer
-                        container={container}
-                        variant="temporary"
-                        open={mobileOpen}
-                        onClose={handleDrawerToggle}
-                        ModalProps={{
-                            keepMounted: true, // Better open performance on mobile.
-                        }}
-                        sx={{
-                            display: { xs: 'block', sm: 'none' },
-                            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                        }}
-                    >
-                        {drawer}
-                    </Drawer>
-                </nav>
-                <Box component="main" sx={{ p: 3 }}>
-                    <Toolbar />
-                </Box>
-            </Box>
         </ThemeProvider>
     );
 }
-
-DrawerAppBar.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window: PropTypes.func,
-};
 
 export default DrawerAppBar;

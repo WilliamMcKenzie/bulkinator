@@ -35,7 +35,8 @@ export default function Home() {
 
     var [addedRecipes, setAddedRecipes] = useState({})
 
-    const [curId, setCurId] = useState('6525cc4cb23307fe32b6b006')
+    let params = (new URL(document.location)).searchParams;
+    const [curId, setCurId] = useState(params.get("id"))
 
     const recipeRef = useRef();
     const loadRef = useRef();
@@ -49,6 +50,7 @@ export default function Home() {
 
     const [recipeListClass, setRecipeListClass] = useState(cn(styles.recipes_list))
     const [headerClass, setHeaderClass] = useState(cn(styles.meals_header, styles.meals_header_contain_view))
+
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries, observer) => {
@@ -100,7 +102,7 @@ export default function Home() {
 
     return (
         <main className={styles.main}>
-            <DrawerAppBar></DrawerAppBar>
+            <DrawerAppBar id={curId}></DrawerAppBar>
 
             <div className={styles.meals_background}></div>
             <div className={headerClass}>
@@ -141,6 +143,7 @@ export default function Home() {
                     </IconButton>
                 </div>
             </div>
+            
             <div className={styles.recipes_container}>
                 <div className={recipeListClass}>
                     <div className={styles.pages} ref={recipeRef}>

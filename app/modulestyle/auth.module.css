@@ -17,8 +17,7 @@
   width: 100vw;
   height: 10vh;
 
-  background-color: white;
-  border-bottom: 1px solid rgb(231, 231, 231);
+  background-color: var(--primary);
 }
 
 .navbar {
@@ -41,6 +40,11 @@
   font-weight: 700;
   font-size: 2rem;
   transition: 100ms;
+}
+
+.navbar a img {
+  padding: 5px;
+  border-radius: 20px;
 }
 
 .logo_container {
@@ -95,34 +99,6 @@
   width: 20vw;
 }
 
-.login_container label {
-  font-weight: 600;
-  font-size: 0.9rem;
-  margin-bottom: 5px;
-}
-
-.login_container input {
-  outline: none;
-  border: 2px solid rgb(231, 231, 231);
-  border-radius: 10px;
-  background-color: white;
-  padding: 15px;
-  margin-bottom: 20px;
-
-  font-family: 'Inter';
-  transition: 0.25s;
-}
-
-.login_container button {
-  background-color: var(--primary);
-  color: white;
-  border: 0;
-  border-radius: 10px;
-
-  padding: 15px;
-  font-family: 'Inter';
-  font-size: 1rem;
-}
 
 .login_container a {
   text-align: center;
@@ -151,14 +127,7 @@
 .oauth_container button {
   width: 100%;
   margin-bottom: 20px;
-
-  background: white;
-  border: 2px solid rgb(231, 231, 231);
-  border-radius: 10px;
-
   padding: 10px;
-  font-family: 'Inter';
-  font-size: 1rem;
 
   display: flex;
   align-items: center;
@@ -192,22 +161,8 @@
     cursor: pointer;
   }
 
-  .login_container input:focus {
-    border: 2px solid var(--primary);
-  }
-
-  .login_container button:hover {
-    filter: brightness(1.1);
-    cursor: pointer;
-  }
-
   .login_container a:hover {
-    color: var(--primary);
-  }
-
-  .oauth_container button:hover {
-    filter: brightness(0.95);
-    cursor: pointer;
+    color: var(--primary) !important;
   }
 
 }
