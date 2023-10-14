@@ -1,13 +1,13 @@
 .main {
     height: 100vh;
     width: 100vw;
-    padding-top: 6rem;
+    padding-top: 6rem !important;
     overflow-y: scroll;
 
     --background-color: rgb(234, 234, 234);
     --border-color: #efefefee;
 
-    background: rgb(248, 248, 248);
+    background: rgb(245, 245, 245);
 }
 
 .overflow {

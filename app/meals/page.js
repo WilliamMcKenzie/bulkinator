@@ -24,7 +24,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import AddIcon from '@mui/icons-material/Add';
 import { Alert, Avatar, Box, Button, ButtonGroup, Checkbox, Collapse, FormControl, FormControlLabel, FormGroup, ImageList, ImageListItem, InputLabel, MenuItem, Modal, Paper, Rating, Select, TextField, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
-import { Bookmark, BookmarkBorder, Favorite, FavoriteBorder, OpenInBrowser, OpenInNew, Search } from '@mui/icons-material';
+import { Bookmark, BookmarkBorder, Close, Favorite, FavoriteBorder, Login, OpenInBrowser, OpenInNew, Search } from '@mui/icons-material';
 
 
 const fetcher = (url, data) => {
@@ -32,11 +32,13 @@ const fetcher = (url, data) => {
 };
 
 export default function Home() {
+    const [loginWarning, setLoginWarning] = useState(false)
 
     var [addedRecipes, setAddedRecipes] = useState({})
 
     let params = (new URL(document.location)).searchParams;
     const [curId, setCurId] = useState(params.get("id"))
+    
 
     const recipeRef = useRef();
     const loadRef = useRef();
@@ -68,7 +70,6 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
-
         async function init() {
             const meals = await fetcher(`/api/meals?input=protein%20meals&diet=high-protein`, false)
             setRecipes([meals.hits]);
@@ -77,12 +78,14 @@ export default function Home() {
             }
             else setNextLink(false)
 
-            const getAddedRecipes = await fetcher(`/api/getRecipes?id=${curId}`, false)
 
-            getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
+            if(curId != "null"){
+             const getAddedRecipes = await fetcher(`/api/getRecipes?id=${curId}`, false)
+             getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
+            }
         }
-
         init()
+    
         return () => { }
     }, [])
 
@@ -103,6 +106,29 @@ export default function Home() {
     return (
         <main className={styles.main}>
             <DrawerAppBar id={curId}></DrawerAppBar>
+            <Collapse in={loginWarning}>
+                <Alert  sx={{position: 'absolute', top:'8vh', left:'50%', width:'calc(100% - 150vh)', display:'flex', alignItems:'center', paddingLeft:'75vh', paddingRight:'75vh', zIndex: 1099, transform: 'translate(-50%, 0)'}} action={<>
+                                            <IconButton
+                                                aria-label="close"
+                                                color="inherit"
+                                                size="small"
+                                                onClick={() => {location.href = '/login'}}
+                                            >
+                                                <Login size="1rem"/>
+                                            </IconButton>
+                                            <IconButton
+                                            aria-label="close"
+                                            color="inherit"
+                                            size="small"
+                                            onClick={() => {setLoginWarning(false)}}
+                                        >
+                                            <Close size="1rem"/>
+                                        </IconButton>
+                                        </>
+                                        } severity="info">
+                You must login to save meals
+                </Alert>                 
+           </Collapse>
 
             <div className={styles.meals_background}></div>
             <div className={headerClass}>
@@ -177,14 +203,18 @@ export default function Home() {
                                             :
                                             <IconButton aria-label="add to favorites">
                                                 <BookmarkBorder onClick={async () => {
-                                                    var url = encodeURIComponent(curRecipe.recipe.uri)
-                                                    setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: true }))
-                                                    const favorite = await fetcher(`/api/favorite?url=${url}&id=${curId}`, false)
+                                                    if(curId != "null"){
+                                                        var url = encodeURIComponent(curRecipe.recipe.uri)
+                                                        setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: true }))
+                                                        const favorite = await fetcher(`/api/favorite?url=${url}&id=${curId}`, false)
+                                                    } else {
+                                                        setLoginWarning(true)
+                                                    }
                                                 }} />
                                             </IconButton>}
                                         <IconButton aria-label="open in new tab">
                                             <OpenInNew onClick={() => {
-                                                window.open(`/meals/${encodeURIComponent(curRecipe._links.self.href)}`)
+                                                window.open(`/meals/${encodeURIComponent(curRecipe._links.self.href)}?id=${curId}`)
                                             }} />
                                         </IconButton>
                                         </CardActions>

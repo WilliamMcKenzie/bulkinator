@@ -24,6 +24,10 @@ export async function GET(request: NextRequest) {
     const apiKey = '4487c73d45a1038e4bb07fbb970f535d';
     const appId = '35545a91';
 
+    if(user.recipes.length < 1){
+        return NextResponse.json([])
+    }
+
     if (user.recipes.length < 20) {
         for (let i = 0; i < user.recipes.length; i++) {
             const curRecipe = user.recipes[i];

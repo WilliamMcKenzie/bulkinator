@@ -23,7 +23,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import AddIcon from '@mui/icons-material/Add';
-import { Alert, Box, Button, ButtonGroup, Checkbox, Collapse, FormControlLabel, FormGroup, ImageList, ImageListItem, Modal, Paper, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
+import { Alert, Backdrop, Box, Button, ButtonGroup, Checkbox, CircularProgress, Collapse, FormControlLabel, FormGroup, ImageList, ImageListItem, Modal, Paper, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
 
 //input 
 import TextField from '@mui/material/TextField';
@@ -127,9 +127,11 @@ export default function Home() {
             var id = params.get("id")
 
             setCurId(id)
-            if(id){
+
+            if(id != 'null' && id){
+                setBackdrop(true);
                 var user = await fetcher(`/api/getPlan?id=${id}`)
-                if (user.plan.date == (new Date).getDate()){
+                if (user.plan && user.plan.date == (new Date).getDate()){
                     setBreakfast(user.plan.breakfast.recipes)
                     setBreakfastServings(user.plan.breakfast.servings)
 
@@ -142,7 +144,8 @@ export default function Home() {
                     if(user.plan.snack1.recipes != []){
                         setSnack1(user.plan.snack1.recipes)
                         setSnack1Servings(user.plan.snack1.servings)
-
+                    }
+                    if(user.plan.snack2.recipes != []){
                         setSnack2(user.plan.snack2.recipes)
                         setSnack2Servings(user.plan.snack2.servings)
                     }
@@ -152,7 +155,12 @@ export default function Home() {
                     meals.forEach(recipe => setRecipes(recipes => [...recipes, recipe.hits]))
 
                     setGenerated(true)
+                    setBackdrop(false);
+                } else {
+                    setBackdrop(false);
                 }
+            } else {
+                setBackdrop(false);
             }
         }
         
@@ -177,43 +185,62 @@ export default function Home() {
 
     //saveButton
     const [savePopup, setSavePopup] = useState(false)
-
-    var breakfastJSON = {
-        recipes: breakfast,
-        servings: breakfastServings
-    }
-    var snack1JSON = {
-        recipes: snack1,
-        servings: snack1Servings
-    }
-    var lunchJSON = {
-        recipes: lunch,
-        servings: lunchServings
-    }
-    var snack2JSON = {
-        recipes: snack2,
-        servings: snack2Servings
-    }
-    var dinnerJSON = {
-        recipes: dinner,
-        servings: dinnerServings
-    }
-
+    const [saveLoading, setSaveLoading] = useState(false)
 
     const save = async () => {
-        var uploadPlan = await fetcher(`/api/uploadPlan`, {breakfast: breakfastJSON, snack1: snack1JSON, lunch: lunchJSON, snack2: snack2JSON, dinner: dinnerJSON, id: curId})
-        setSavePopup(false)
+
+        setSaveLoading(true)
+
+        if(curId != "null" && curId){
+            for(var i = 0; i < breakfast.length; i++){
+                breakfast[i].savedPlan = true
+            }
+            for(var i = 0; i < snack1.length; i++){
+                snack1[i].savedPlan = true
+            }
+            for(var i = 0; i < lunch.length; i++){
+                lunch[i].savedPlan = true
+            }
+            for(var i = 0; i < snack2.length; i++){
+                snack2[i].savedPlan = true
+            }
+            for(var i = 0; i < dinner.length; i++){
+                dinner[i].savedPlan = true
+            }
+    
+            var breakfastJSON = {
+                recipes: breakfast,
+                servings: breakfastServings
+            }
+            var snack1JSON = {
+                recipes: snack1,
+                servings: snack1Servings
+            }
+            var lunchJSON = {
+                recipes: lunch,
+                servings: lunchServings
+            }
+            var snack2JSON = {
+                recipes: snack2,
+                servings: snack2Servings
+            }
+            var dinnerJSON = {
+                recipes: dinner,
+                servings: dinnerServings
+            }
+    
+            var uploadPlan = await fetcher(`/api/uploadPlan`, {breakfast: breakfastJSON, snack1: snack1JSON, lunch: lunchJSON, snack2: snack2JSON, dinner: dinnerJSON, id: curId})
+        }
+
+        setSaveLoading(false)
+        setSavePopup(false) 
     }
 
     //set servings
-    const [hasBeenEdited, setHasBeenEdited] = useState([])
     const servingHandeler = e => {
+        setSavePopup(true)
         var index = e.target.name
         var variant = e.target.id
-
-        var editedTemp = [...hasBeenEdited]
-        editedTemp[index] = true
-        setHasBeenEdited(editedTemp)
 
         if (variant == 'breakfast') {
             var temp = [...breakfastServings]
@@ -252,8 +279,11 @@ export default function Home() {
         setLoading(true)
 
         setRecipes([])
-        var meals = await fetcher(`/api/getFavoritedRecipes?id=${curId}`, false)
-        meals.forEach(recipe => setRecipes(recipes => [...recipes, recipe.hits]))
+
+        if(curId != 'null' && curId){
+            var meals = await fetcher(`/api/getFavoritedRecipes?id=${curId}`, false)
+            meals.forEach(recipe => setRecipes(recipes => [...recipes, recipe.hits]))
+        }
 
         if (calories > 500) {
             var meals = await fetcher(`/api/plan?calories=${calories}&snacking=${checked}&diet=${diet}`, false)
@@ -374,7 +404,7 @@ export default function Home() {
             servingsTemp.push(1)
             setSnack2Servings(servingsTemp)
         }
-        if (dinner) {
+        if (dinnerChecked) {
             var temp = [...dinner]
             temp.push(selectedRecipe)
             setDinner(temp)
@@ -389,9 +419,13 @@ export default function Home() {
         setBreakfastChecked(false)
         setLunchChecked(false)
         setDinnerChecked(false)
+        setSavePopup(true)
 
         handleClose()
     };
+
+    //backdrop
+    const [openBackdrop, setBackdrop] = useState(false);
 
     const [alertOpen, setAlertOpen] = useState(false);
     const [successOpen, setSuccessOpen] = useState(false);
@@ -399,6 +433,13 @@ export default function Home() {
     return (<main className={styles.main}>
         <ThemeProvider theme={lightTheme}>
             <DrawerAppBar id={curId}/>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={openBackdrop}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{
                     width: 'calc(100% - 440px)',
@@ -411,7 +452,7 @@ export default function Home() {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    <Typography variant='h3' sx={{ marginBottom: 'auto', paddingBottom: '5vh' }}>
+                    <Typography variant='h3' sx={{ marginBottom: 'auto', paddingBottom: '5vh', paddingTop: '6rem' }}>
                         What is your diet?
                     </Typography>
                     <Typography variant='subtitle1' sx={{ marginBottom: 'auto', width: '60%', textAlign: 'center', paddingBottom: '5vh' }}>
@@ -539,7 +580,7 @@ export default function Home() {
                                                 borderRadius: '10px'
                                             }}
                                             onClick={() => {
-                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}`)
+                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}?id=${curId}`)
                                             }}
                                             loading="lazy"
                                         />
@@ -558,10 +599,22 @@ export default function Home() {
                                                 variant="filled"
                                                 name={index}
                                                 onChange={servingHandeler}
-                                                defaultValue={curMeal.isAdded ? 1 : Math.round(calorieChart.breakfast / curMeal.recipe.calories * 100) / 100}
+                                                defaultValue={curMeal.savedPlan ? breakfastServings[index] : curMeal.isAdded ? 1 : Math.round(calorieChart.breakfast / curMeal.recipe.calories * 100) / 100}
                                             />
                                         </div>
-                                        <Delete className={styles.deleteIcon} sx={{ marginLeft: 'auto' }} onClick={() => {
+                                        <Checkbox sx={{marginLeft:'auto'}} color="success" checked={curMeal.checked} onChange={() => {
+                                            if(breakfast[index].checked){
+                                                var temp = [...breakfast]
+                                                temp[index].checked = false
+                                                setBreakfast(temp)
+                                            } else {
+                                                var temp = [...breakfast]
+                                                temp[index].checked = true
+                                                setBreakfast(temp)
+                                            }
+                                            setSavePopup(true)
+                                        }}/>
+                                        <Delete className={styles.deleteIcon} sx={{ marginLeft: '10px' }} onClick={() => {
                                             var temp = [...breakfast]
                                             temp.splice(index, 1);
                                             setBreakfast(temp)
@@ -569,6 +622,7 @@ export default function Home() {
                                             var tempServings = [...breakfastServings]
                                             tempServings.splice(index, 1);
                                             setBreakfastServings(tempServings)
+                                            setSavePopup(true)
                                         }}></Delete>
                                     </Paper>
                                 </>
@@ -595,7 +649,7 @@ export default function Home() {
                                                 borderRadius: '10px'
                                             }}
                                             onClick={() => {
-                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}`)
+                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}?id=${curId}`)
                                             }}
                                             loading="lazy"
                                         />
@@ -614,10 +668,22 @@ export default function Home() {
                                                 variant="filled"
                                                 name={index}
                                                 onChange={servingHandeler}
-                                                defaultValue={curMeal.isAdded ? 1 : Math.round(calorieChart.snack1 / curMeal.recipe.calories * 100) / 100}
+                                                defaultValue={curMeal.savedPlan ? snack1Servings[index] :curMeal.isAdded ? 1 : Math.round(calorieChart.snack1 / curMeal.recipe.calories * 100) / 100}
                                             />
                                         </div>
-                                        <Delete className={styles.deleteIcon} sx={{ marginLeft: 'auto' }} onClick={() => {
+                                        <Checkbox sx={{marginLeft:'auto'}} color="success" checked={curMeal.checked} onChange={() => {
+                                            if(snack1[index].checked){
+                                                var temp = [...snack1]
+                                                temp[index].checked = false
+                                                setSnack1(temp)
+                                            } else {
+                                                var temp = [...snack1]
+                                                temp[index].checked = true
+                                                setSnack1(temp)
+                                            }
+                                            setSavePopup(true)
+                                        }}/>
+                                        <Delete className={styles.deleteIcon} sx={{ marginLeft: '10px' }} onClick={() => {
                                             var temp = [...snack1]
                                             temp.splice(index, 1);
                                             setSnack1(temp)
@@ -625,6 +691,7 @@ export default function Home() {
                                             var tempServings = [...snack1Servings]
                                             tempServings.splice(index, 1);
                                             setSnack1Servings(tempServings)
+                                            setSavePopup(true)
                                         }}></Delete>
                                     </Paper>
                                 </>
@@ -651,7 +718,7 @@ export default function Home() {
                                                 borderRadius: '10px'
                                             }}
                                             onClick={() => {
-                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}`)
+                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}?id=${curId}`)
                                             }}
                                             loading="lazy"
                                         />
@@ -670,10 +737,23 @@ export default function Home() {
                                                 variant="filled"
                                                 name={index}
                                                 onChange={servingHandeler}
-                                                defaultValue={curMeal.isAdded ? 1 : Math.round(calorieChart.lunch / curMeal.recipe.calories * 100) / 100}
+                                                defaultValue={curMeal.savedPlan ? lunchServings[index] :curMeal.isAdded ? 1 : Math.round(calorieChart.lunch / curMeal.recipe.calories * 100) / 100}
                                             />
                                         </div>
-                                        <Delete className={styles.deleteIcon} sx={{ marginLeft: 'auto' }} onClick={() => {
+                                        <Checkbox sx={{marginLeft:'auto'}} color="success" checked={curMeal.checked} onChange={() => {
+                                            if(lunch[index].checked){
+                                                var temp = [...lunch]
+                                                temp[index].checked = false
+                                                setLunch(temp)
+                                            } else {
+                                                var temp = [...lunch]
+                                                temp[index].checked = true
+                                                setLunch(temp)
+                                            }
+                                            setSavePopup(true)
+                                        }}/>
+                                        <Delete className={styles.deleteIcon} sx={{ marginLeft: '10px' }} onClick={() => {
+                                            setSavePopup(true)
                                             var temp = [...lunch]
                                             temp.splice(index, 1);
                                             setLunch(temp)
@@ -707,7 +787,7 @@ export default function Home() {
                                                 borderRadius: '10px'
                                             }}
                                             onClick={() => {
-                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}`)
+                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}?id=${curId}`)
                                             }}
                                             loading="lazy"
                                         />
@@ -726,10 +806,22 @@ export default function Home() {
                                                 variant="filled"
                                                 name={index}
                                                 onChange={servingHandeler}
-                                                defaultValue={curMeal.isAdded ? 1 : Math.round(calorieChart.snack2 / curMeal.recipe.calories * 100) / 100}
+                                                defaultValue={curMeal.savedPlan ? snack2Servings[index] :curMeal.isAdded ? 1 : Math.round(calorieChart.snack2 / curMeal.recipe.calories * 100) / 100}
                                             />
                                         </div>
-                                        <Delete className={styles.deleteIcon} sx={{ marginLeft: 'auto' }} onClick={() => {
+                                        <Checkbox sx={{marginLeft:'auto'}} color="success" checked={curMeal.checked} onChange={() => {
+                                            if(snack2[index].checked){
+                                                var temp = [...snack2]
+                                                temp[index].checked = false
+                                                setSnack2(temp)
+                                            } else {
+                                                var temp = [...snack2]
+                                                temp[index].checked = true
+                                                setSnack2(temp)
+                                            }
+                                            setSavePopup(true)
+                                        }}/>
+                                        <Delete className={styles.deleteIcon} sx={{ marginLeft: '10px' }} onClick={() => {
                                             var temp = [...snack2]
                                             temp.splice(index, 1);
                                             setSnack2(temp)
@@ -737,6 +829,7 @@ export default function Home() {
                                             var tempServings = [...snack2Servings]
                                             tempServings.splice(index, 1);
                                             setSnack2Servings(tempServings)
+                                            setSavePopup(true)
                                         }}></Delete>
                                     </Paper>
                                 </>
@@ -757,7 +850,7 @@ export default function Home() {
                                             srcSet={curMeal.recipe.image}
                                             src={curMeal.recipe.image}
                                             onClick={() => {
-                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}`)
+                                                window.open(`./meals/${encodeURIComponent(curMeal._links.self.href)}?id=${curId}`)
                                             }}
                                             alt={'food'}
                                             style={{
@@ -782,10 +875,22 @@ export default function Home() {
                                                 variant="filled"
                                                 name={index}
                                                 onChange={servingHandeler}
-                                                defaultValue={curMeal.isAdded ? 1 : Math.round(calorieChart.dinner / curMeal.recipe.calories * 100) / 100}
+                                                defaultValue={curMeal.savedPlan ? dinnerServings[index] : curMeal.isAdded ? 1 : Math.round(calorieChart.dinner / curMeal.recipe.calories * 100) / 100}
                                             />
                                         </div>
-                                        <Delete className={styles.deleteIcon} sx={{ marginLeft: 'auto' }} onClick={() => {
+                                        <Checkbox sx={{marginLeft:'auto'}} color="success" checked={curMeal.checked} onChange={() => {
+                                            if(dinner[index].checked){
+                                                var temp = [...dinner]
+                                                temp[index].checked = false
+                                                setDinner(temp)
+                                            } else {
+                                                var temp = [...dinner]
+                                                temp[index].checked = true
+                                                setDinner(temp)
+                                            }
+                                            setSavePopup(true)
+                                        }}/>
+                                        <Delete className={styles.deleteIcon} sx={{ marginLeft: '10px' }} onClick={() => {
                                             var temp = [...dinner]
                                             temp.splice(index, 1);
                                             setDinner(temp)
@@ -793,6 +898,7 @@ export default function Home() {
                                             var tempServings = [...dinnerServings]
                                             tempServings.splice(index, 1);
                                             setDinnerServings(tempServings)
+                                            setSavePopup(true)
                                         }}></Delete>
                                     </Paper>
                                 </>
@@ -800,11 +906,12 @@ export default function Home() {
                         </Paper>
                     </div>
                     <div className={styles.recipes_container}>
+                        {curId != "null" && recipes[0] ? <>
                         <Typography color="text.secondary" variant="h4" component="h4">
                             Saved Meals
                         </Typography>
                         <Paper sx={{ padding: '2vh', marginTop: '10px' }}>
-                            <ImageList sx={{ width: 400, height: '75vh', margin: 0, marginLeft: 'auto' }} cols={3} rowHeight={164}>
+                            <ImageList sx={{ width: 400, height: 'fit-content', maxHeight: '75vh', margin: 0, marginLeft: 'auto' }} cols={3} rowHeight={164}>
                                 {recipes && recipes.length >= 0 ? recipes.map((recipeList, i) => (
                                     <>
                                         {recipeList.map((curRecipe, k) => (
@@ -823,7 +930,7 @@ export default function Home() {
                                     </>
                                 )) : <></>}
                             </ImageList>
-                        </Paper>
+                        </Paper></> : <></>}
                     </div>
                 </div> : <></>}
             <Modal
@@ -857,14 +964,14 @@ export default function Home() {
                 </Box>
             </Modal>
             <Collapse in={savePopup}>
-                <Alert sx={{position: 'absolute', bottom:'10px', left:'50%', transform: 'translate(-50%, 0)'}} action={
+                <Alert  sx={{position: 'absolute', top:'8vh', left:'50%', width:'calc(100% - 150vh)', display:'flex', alignItems:'center', paddingLeft:'75vh', paddingRight:'75vh', zIndex: 1099, transform: 'translate(-50%, 0)'}} action={
                                             <IconButton
                                                 aria-label="close"
                                                 color="inherit"
                                                 size="small"
                                                 onClick={save}
                                             >
-                                                <Check fontSize="inherit" />
+                                                {saveLoading ? <CircularProgress size="1rem"/>: <Check fontSize="inherit" />}
                                             </IconButton>
                                         } severity="info">
                 Do you want to save this plan?

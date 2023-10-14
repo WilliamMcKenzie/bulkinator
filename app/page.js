@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
     let params = (new URL(document.location)).searchParams;
     setId(params.get("id"))
-    console.log(id + "WOW")
+    // history.replaceState({}, null, "/");
   }, [])
 
   return (
@@ -40,7 +40,7 @@ export default function Home() {
 
       <div className={styles.grid}>
         <a
-          href="./meals"
+          href={`./meals?id=${id}`}
           className={styles.card}
           target="_blank"
           rel="noopener noreferrer"
@@ -51,7 +51,7 @@ export default function Home() {
           <p>Cook meals that work for you.</p>
         </a>
         <a
-          href="./planner"
+          href={`./planner?id=${id}`}
           className={styles.card}
           target="_blank"
           rel="noopener noreferrer"
