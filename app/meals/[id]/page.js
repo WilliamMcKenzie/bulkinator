@@ -27,18 +27,20 @@ const fetcher = (url, data) => {
 export default function Page({ params }) {
     var [recipe, setRecipe] = useState(false);
     let searchParams = (new URL(document.location)).searchParams;
-    const [curId, setCurId] = useState(searchParams.get("id"))
+    const [curId, setCurId] = useState("")
     var [addedRecipes, setAddedRecipes] = useState(false);
 
     var [row, setRows] = useState(createData('Loading...', 0, 0, 0, 0))
     var [likes, setLikes] = useState(0)
 
     const [inProcess, setProcess] = useState(false)
-    
 
     useEffect(() => {
 
         async function initRecipe() {
+            let searchParams = (new URL(document.location)).searchParams;
+            setCurId(searchParams.get("id"))
+
             var myRecipe = await fetcher(`/api/meal?url=${params.id}`, false)
             setRecipe(myRecipe)
             const getAddedRecipes = await fetcher(`/api/getRecipes?id=${searchParams.get("id")}`, false)

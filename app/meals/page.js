@@ -36,9 +36,7 @@ export default function Home() {
 
     var [addedRecipes, setAddedRecipes] = useState({})
 
-    let params = (new URL(document.location)).searchParams;
-    const [curId, setCurId] = useState(params.get("id"))
-    
+    const [curId, setCurId] = useState("")
 
     const recipeRef = useRef();
     const loadRef = useRef();
@@ -70,7 +68,11 @@ export default function Home() {
     }, []);
 
     useEffect(() => {
+        
         async function init() {
+            let params = (new URL(document.location)).searchParams;
+            setCurId(params.get("id"))
+
             const meals = await fetcher(`/api/meals?input=protein%20meals&diet=high-protein`, false)
             setRecipes([meals.hits]);
             if (meals._links.next) {
@@ -80,7 +82,7 @@ export default function Home() {
 
 
             if(curId != "null"){
-             const getAddedRecipes = await fetcher(`/api/getRecipes?id=${curId}`, false)
+             const getAddedRecipes = await fetcher(`/api/getRecipes?id=${params.get("id")}`, false)
              getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
             }
         }
