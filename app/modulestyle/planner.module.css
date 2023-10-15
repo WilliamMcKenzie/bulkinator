@@ -1,12 +1,13 @@
 .main {
     height: 100vh;
     width: 100vw;
+    padding-top: 6rem !important;
     overflow-y: scroll;
 
     --background-color: rgb(234, 234, 234);
     --border-color: #efefefee;
 
-    background: rgb(242, 242, 242);
+    background: rgb(245, 245, 245);
 }
 
 .overflow {
@@ -273,7 +274,8 @@
     margin-left: auto;
 
     position: sticky;
-    top: 10vh;
+    top: 0vh;
+    margin-bottom: 6rem;
 }
 
 .recipes_list {

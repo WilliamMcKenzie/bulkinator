@@ -3,9 +3,7 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 6rem;
-    padding-top: 0;
-    max-height: 100vh;
+    height: 100vh;
 
     --primary: #2196f3;
     background: rgb(242, 242, 242);
@@ -242,8 +240,8 @@
     max-width: 100%;
     min-width: 500px;
     width: 80vw;
-    height: 72vh;
     margin-top: 28vh;
+    height: 72vh;
     overflow-y: scroll;
     position: relative;
 

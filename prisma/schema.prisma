@@ -16,6 +16,7 @@ model User {
   name String 
   email String @unique
   role String @default("BASIC")
+  plan Json?
   userID String[] @db.ObjectId
   recipes Recipe[] @relation( fields: [userID], references: [id])
 }

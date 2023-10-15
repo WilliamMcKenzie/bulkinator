@@ -26,21 +26,24 @@ const fetcher = (url, data) => {
 
 export default function Page({ params }) {
     var [recipe, setRecipe] = useState(false);
-    var [curId, setCurId] = useState('6526c9f4f6ee11fa75b2e3d5')
+    let searchParams = (new URL(document.location)).searchParams;
+    const [curId, setCurId] = useState("")
     var [addedRecipes, setAddedRecipes] = useState(false);
 
-    var [row, setRows] = useState(createData('Frozen yoghurt', 159, 6.0, 24, 4.0))
+    var [row, setRows] = useState(createData('Loading...', 0, 0, 0, 0))
     var [likes, setLikes] = useState(0)
 
     const [inProcess, setProcess] = useState(false)
-    
 
     useEffect(() => {
 
         async function initRecipe() {
+            let searchParams = (new URL(document.location)).searchParams;
+            setCurId(searchParams.get("id"))
+
             var myRecipe = await fetcher(`/api/meal?url=${params.id}`, false)
             setRecipe(myRecipe)
-            const getAddedRecipes = await fetcher(`/api/getRecipes?id=${curId}`, false)
+            const getAddedRecipes = await fetcher(`/api/getRecipes?id=${searchParams.get("id")}`, false)
 
             getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
             const getLikes = await fetcher(`/api/likeCount?uri=${encodeURIComponent(myRecipe.recipe.uri)}`, false)
@@ -52,7 +55,7 @@ export default function Page({ params }) {
     }, [])
 
     return <main className={styles.main}>
-        <DrawerAppBar></DrawerAppBar>
+        <DrawerAppBar id={curId}></DrawerAppBar>
         {recipe ?
             <div className={styles.recipe}>
                 <Paper className={styles.recipe_card}>
