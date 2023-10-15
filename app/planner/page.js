@@ -969,7 +969,7 @@ export default function Home() {
                                                 aria-label="close"
                                                 color="inherit"
                                                 size="small"
-                                                onClick={save}
+                                                onClick={curId != "null" ? save : location.href="/login"}
                                             >
                                                 {saveLoading ? <CircularProgress size="1rem"/>: <Check fontSize="inherit" />}
                                             </IconButton>
