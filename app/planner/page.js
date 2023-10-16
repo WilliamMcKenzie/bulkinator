@@ -23,7 +23,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import AddIcon from '@mui/icons-material/Add';
-import { Alert, Backdrop, Box, Button, ButtonGroup, Checkbox, CircularProgress, Collapse, FormControlLabel, FormGroup, ImageList, ImageListItem, Modal, Paper, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
+import { Alert, AlertTitle, Backdrop, Box, Button, ButtonGroup, Checkbox, CircularProgress, Collapse, FormControlLabel, FormGroup, ImageList, ImageListItem, Modal, Paper, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
 
 //input 
 import TextField from '@mui/material/TextField';
@@ -166,6 +166,7 @@ export default function Home() {
         
 
         init()
+        history.replaceState({}, null, "/");
     }, [])
 
     
@@ -964,16 +965,17 @@ export default function Home() {
                 </Box>
             </Modal>
             <Collapse in={savePopup}>
-                <Alert  sx={{position: 'absolute', top:'8vh', left:'50%', width:'calc(100% - 150vh)', display:'flex', alignItems:'center', paddingLeft:'75vh', paddingRight:'75vh', zIndex: 1099, transform: 'translate(-50%, 0)'}} action={
+                <Alert  sx={{position: 'absolute', top:'2vh', left:'50%', display:'flex', alignItems:'center', zIndex: 1200, filter: 'opacity(0.9)', transform: 'translate(-50%, 0)'}} action={
                                             <IconButton
                                                 aria-label="close"
                                                 color="inherit"
                                                 size="small"
-                                                onClick={curId != "null" ? save : location.href="/login"}
+                                                onClick={curId != "null" ? save : () => location.href="/login"}
                                             >
                                                 {saveLoading ? <CircularProgress size="1rem"/>: <Check fontSize="inherit" />}
                                             </IconButton>
                                         } severity="info">
+                <AlertTitle>Info</AlertTitle>
                 Do you want to save this plan?
                 </Alert>                 
            </Collapse>

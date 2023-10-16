@@ -2,8 +2,8 @@
 import Image from 'next/image'
 import styles from './modulestyle/home.module.css'
 import DrawerAppBar from './components/Navbar'
-import { useRouter } from 'next/navigation'
 import { useEffect, useReducer, useRef, useState } from 'react'
+
 
 export default function Home() {
 
@@ -12,7 +12,7 @@ export default function Home() {
   useEffect(() => {
     let params = (new URL(document.location)).searchParams;
     setId(params.get("id"))
-    // history.replaceState({}, null, "/");
+    history.replaceState({}, null, "/");
   }, [])
 
   return (
@@ -51,10 +51,10 @@ export default function Home() {
           <p>Cook meals that work for you.</p>
         </a>
         <a
-          href={`./planner?id=${id}`}
           className={styles.card}
           target="_blank"
           rel="noopener noreferrer"
+          href={`./planner?id=${id}`}
         >
           <h2>
             Plan Diet<span>-&gt;</span>
