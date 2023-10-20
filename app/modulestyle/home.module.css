@@ -88,9 +88,10 @@
 .card {
   padding: 1rem 1.2rem;
   border-radius: var(--border-radius);
-  background: rgba(var(--card-rgb), 0);
-  border: 1px solid rgba(0, 0, 0, 0);
+  background: rgba(255, 255, 255, 0.95);
+    border: 5px solid rgba(255, 255, 255,0.5);
   transition: background 200ms, border 200ms;
+  margin: 10px;
 }
 
 .card span {
@@ -118,7 +119,7 @@
   top: 0;
   width: 100vw;
   height: 100vh;
-  background-image: url('../images/center-background.svg');
+  background-image: url('../images/wave_background.svg');
   background-size: cover;
   background-repeat: no-repeat;
   z-index: -1;
@@ -191,8 +192,7 @@
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
-    background: rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
   }
 
   .card:hover span {
