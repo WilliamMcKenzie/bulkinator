@@ -29,9 +29,10 @@ export default function Home() {
 
     const login = async () => {
       setStalled(true)
+        setLoginWarning(false)
         var curUser = await fetcher(`/api/login?email=${email}&password=${password}`, false)
         if(curUser){
-            setLoginWarning(false)
+            document.cookie = `id=${curUser.id}; path=/`
             location.href = `/?id=${curUser.id}`
         } else {
           setLoginWarning(true)
