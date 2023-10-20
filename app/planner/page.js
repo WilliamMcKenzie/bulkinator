@@ -29,6 +29,19 @@ import { Alert, AlertTitle, Backdrop, Box, Button, ButtonGroup, Checkbox, Circul
 import TextField from '@mui/material/TextField';
 import { Check, Close, Delete, DeleteOutline, Egg, Fastfood, GrassOutlined, HourglassEmpty, NoFood, RemoveCircle, Save } from '@mui/icons-material';
 
+import { driver } from "driver.js";
+import "driver.js/dist/driver.css";
+
+const driverObj = driver({
+  showProgress: true,
+  steps: [
+    { element: '#diets', popover: { title: 'Diets', description: 'You can chose from the avaliable diets to get custom results.', side: "top", align: 'start' }},
+    { element: '#calories', popover: { title: 'Calories', description: 'Select calories based on your preference. If you need a guide check out https://www.calculator.net/calorie-calculator.html', side: "left", align: 'start' }},
+    { element: '#snacking', popover: { title: 'Snacking', description: 'If snacking is selected, the planner also generates snacks in between meals.', side: "right", align: 'start' }},
+    { popover: { title: 'Good luck!', description: 'And that is all, go ahead and start bulking!' } }
+  ]
+});
+
 const fetcher = (url, data) => {
     if(data){
         return axios.post(url, data).then(res => res.data);
@@ -181,6 +194,7 @@ export default function Home() {
                 }
             } else {
                 setBackdrop(false);
+                driverObj.drive();
             }
         }
         
@@ -473,7 +487,7 @@ export default function Home() {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    <Typography variant='h3' sx={{ marginBottom: 'auto', paddingBottom: '5vh', paddingTop: '6rem' }}>
+                    <Typography variant='h3' sx={{ marginBottom: 'auto', paddingBottom: '5vh'}}>
                         What is your diet?
                     </Typography>
                     <Typography variant='subtitle1' sx={{ marginBottom: 'auto', width: '60%', textAlign: 'center', paddingBottom: '5vh' }}>
@@ -487,7 +501,7 @@ export default function Home() {
                         justifyContent: 'center',
                         paddingBottom: '15px'
                     }}>
-                        <ToggleButtonGroup {...control} size="large" aria-label="large button group" >
+                        <ToggleButtonGroup {...control} size="large" aria-label="large button group" id='diets'>
                             <ToggleButton value="">Default <Fastfood sx={{ marginleft: '5px' }}></Fastfood></ToggleButton>
                             <ToggleButton value="vegan">Vegan<GrassOutlined sx={{ marginleft: '5px' }}></GrassOutlined></ToggleButton>
                             <ToggleButton value="vegetarian">Vegetarian<Egg sx={{ marginleft: '5px' }}></Egg></ToggleButton>
@@ -495,7 +509,7 @@ export default function Home() {
                         </ToggleButtonGroup >
                     </div>
                     <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: 'fit-content', padding: '15px' }}>
-                        <Box sx={{ width: '100%' }}>
+                        {/* <Box sx={{ width: '100%' }}>
                             <Collapse in={successOpen}>
                                 <Alert
                                     severity="error"
@@ -535,7 +549,7 @@ export default function Home() {
                                     Success!
                                 </Alert>
                             </Collapse>
-                        </Box>
+                        </Box> */}
                         <div style={{
                             width: '80%',
                             height: 'fit-content',
@@ -545,7 +559,7 @@ export default function Home() {
                             paddingBottom: '15px'
                         }}>
                             <TextField
-                                id="outlined-number"
+                                id="calories"
                                 label="Cals"
                                 type="number"
                                 variant="outlined"
@@ -553,7 +567,7 @@ export default function Home() {
                                 value={calories}
                                 sx={{ width: '25%' }}
                             />
-                            <FormControlLabel control={<Checkbox defaultChecked checked={checked} onChange={snackingChange} inputProps={{ 'aria-label': 'controlled' }} />} label="Include Snacking" sx={{ marginLeft: '10px' }} />
+                            <FormControlLabel id='snacking' control={<Checkbox defaultChecked checked={checked} onChange={snackingChange} inputProps={{ 'aria-label': 'controlled' }} />} label="Include Snacking" sx={{ marginLeft: '10px' }} />
                         </div>
                         <Button size='large' sx={{ marginTop: 'auto' }} onClick={planMeal}>
                             {isLoading ? <HourglassEmpty className={styles.loadingIcon}></HourglassEmpty> : "Generate"}
