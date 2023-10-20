@@ -23,7 +23,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import AddIcon from '@mui/icons-material/Add';
-import { Alert, AlertTitle, Avatar, Box, Button, ButtonGroup, Checkbox, Collapse, FormControl, FormControlLabel, FormGroup, ImageList, ImageListItem, InputLabel, MenuItem, Modal, Paper, Rating, Select, TextField, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
+import { Alert, AlertTitle, Avatar, Box, Button, ButtonGroup, Checkbox, Collapse, FormControl, FormControlLabel, FormGroup, ImageList, ImageListItem, InputLabel, MenuItem, Modal, Paper, Rating, Select, Snackbar, TextField, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
 import { Bookmark, BookmarkBorder, Close, Favorite, FavoriteBorder, Login, OpenInBrowser, OpenInNew, Search } from '@mui/icons-material';
 
 import { useParams } from 'next/navigation'
@@ -57,13 +57,21 @@ export default function Home() {
     const [recipeListClass, setRecipeListClass] = useState(cn(styles.recipes_list))
     const [headerClass, setHeaderClass] = useState(cn(styles.meals_header, styles.meals_header_contain_view))
 
-    // useEffect(() => { 
-    //     if (router.asPath === '/') {
-    //       window.onpopstate = () => { 
-    //         history.go(1);
-    //       };
-    //     }
-    // }, [router]);
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries, observer) => {
@@ -85,7 +93,10 @@ export default function Home() {
         async function init() {
             let params = (new URL(document.location)).searchParams;
             setCurId(params.get("id"))
-            history.replaceState({}, null, "/");
+            if(getCookie("id") != ""){
+                setCurId(getCookie("id"))
+            }
+            history.replaceState({}, null, "/meals");
 
             const meals = await fetcher(`/api/meals?input=protein%20meals&diet=high-protein`, false)
             setRecipes([meals.hits]);
@@ -97,6 +108,9 @@ export default function Home() {
 
             if(params.get("id") != "null" && params.get("id") != null){
              const getAddedRecipes = await fetcher(`/api/getRecipes?id=${params.get("id")}`, false)
+             getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
+            } else if(getCookie("id") != ""){
+             const getAddedRecipes = await fetcher(`/api/getRecipes?id=${getCookie("id")}`, false)
              getAddedRecipes.recipes.forEach(recipe => setAddedRecipes(addedRecipes => ({ ...addedRecipes, [recipe.url]: true })))
             }
         }
@@ -126,30 +140,30 @@ export default function Home() {
             <div className={styles.meals_background}></div>
             <div className={headerClass}>
                 <div className={styles.meals_header_background}></div>
-                <Collapse in={loginWarning} sx={{zIndex: '1200', marginBottom: '10px'}}>
-                            <Alert sx={{zIndex: '1200', filter: 'opacity(0.9)'}} action={<>
-                                                            <IconButton
-                                                                aria-label="close"
-                                                                color="inherit"
-                                                                size="small"
-                                                                onClick={() => {location.href = '/login'}}
-                                                            >
-                                                                <Login size="1rem"/>
-                                                            </IconButton>
-                                                            <IconButton
-                                                            aria-label="close"
-                                                            color="inherit"
-                                                            size="small"
-                                                            onClick={() => {setLoginWarning(false)}}
-                                                        >
-                                                            <Close size="1rem"/>
-                                                        </IconButton>
-                                                        </>
-                                                        } severity="info">
-                                <AlertTitle>Info</AlertTitle>
-                                You must login to save meals!
-                        </Alert>                 
-                    </Collapse>
+                
+                <Snackbar sx={{right: '20px !important', left: 'auto !important'}} open={loginWarning} autoHideDuration={6000}>
+                <Alert onClose={loginWarning} severity="info" sx={{ width: '100%' }} action={<>
+                                            <IconButton
+                                                aria-label="close"
+                                                color="inherit"
+                                                size="small"
+                                                onClick={()=>location.href="/login"}
+                                            >
+                                                <Login fontSize="inherit" />
+                                            </IconButton>
+                                            <IconButton
+                                            aria-label="close"
+                                            color="inherit"
+                                            size="small"
+                                            onClick={()=>setLoginWarning(false)}
+                                        >
+                                            <Close fontSize="inherit" />
+                                        </IconButton>
+                                        </>
+                                        }>
+                    You must login to save meals!
+                </Alert>
+            </Snackbar>
                 <div style={{ padding: 0.5, display: 'flex', alignItems: 'center', marginBottom: 5 }}>
                     <TextField id="outlined-basic" label="Meal" variant="outlined" value={recipeInput}
                         onChange={e => {
@@ -218,7 +232,7 @@ export default function Home() {
                                             :
                                             <IconButton aria-label="add to favorites">
                                                 <BookmarkBorder onClick={async () => {
-                                                    if(curId != "null"){
+                                                    if(curId != "null" && curId != "" && curId){
                                                         var url = encodeURIComponent(curRecipe.recipe.uri)
                                                         setAddedRecipes(addedRecipes => ({ ...addedRecipes, [curRecipe.recipe.uri]: true }))
                                                         const favorite = await fetcher(`/api/favorite?url=${url}&id=${curId}`, false)

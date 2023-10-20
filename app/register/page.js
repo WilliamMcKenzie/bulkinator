@@ -39,6 +39,7 @@ export default function Home() {
         }
         var curUser = await fetcher(`/api/register?name=${name}&email=${email}&password=${password}`, false)
         if(curUser){
+            document.cookie = `id=${curUser.id}; path=/`
             location.href = `/?id=${curUser.id}`
         } else {
             setLoginWarning(true)

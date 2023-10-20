@@ -23,7 +23,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import AddIcon from '@mui/icons-material/Add';
-import { Alert, AlertTitle, Backdrop, Box, Button, ButtonGroup, Checkbox, CircularProgress, Collapse, FormControlLabel, FormGroup, ImageList, ImageListItem, Modal, Paper, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
+import { Alert, AlertTitle, Backdrop, Box, Button, ButtonGroup, Checkbox, CircularProgress, Collapse, FormControlLabel, FormGroup, ImageList, ImageListItem, Modal, Paper, Snackbar, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
 
 //input 
 import TextField from '@mui/material/TextField';
@@ -118,6 +118,22 @@ export default function Home() {
     const [snack2, setSnack2] = useState([])
     const [snack2Servings, setSnack2Servings] = useState([])
 
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+
     useEffect(() => {
 
         setRecipes([])
@@ -125,10 +141,14 @@ export default function Home() {
         async function init() {
             let params = (new URL(document.location)).searchParams;
             var id = params.get("id")
+            if(getCookie("id") != ""){
+                id = getCookie("id")
+            }
 
             setCurId(id)
+            
 
-            if(id != 'null' && id){
+            if(id != 'null' && id && id != ''){
                 setBackdrop(true);
                 var user = await fetcher(`/api/getPlan?id=${id}`)
                 if (user.plan && user.plan.date == (new Date).getDate()){
@@ -166,7 +186,7 @@ export default function Home() {
         
 
         init()
-        history.replaceState({}, null, "/");
+        history.replaceState({}, null, "/planner");
     }, [])
 
     
@@ -964,8 +984,8 @@ export default function Home() {
                     </FormGroup>
                 </Box>
             </Modal>
-            <Collapse in={savePopup}>
-                <Alert  sx={{position: 'absolute', top:'2vh', left:'50%', display:'flex', alignItems:'center', zIndex: 1200, filter: 'opacity(0.9)', transform: 'translate(-50%, 0)'}} action={
+            <Snackbar sx={{right: '20px !important', left: 'auto !important'}} open={savePopup} autoHideDuration={6000}>
+                <Alert onClose={handleClose} severity="info" sx={{ width: '100%' }} action={<>
                                             <IconButton
                                                 aria-label="close"
                                                 color="inherit"
@@ -974,11 +994,19 @@ export default function Home() {
                                             >
                                                 {saveLoading ? <CircularProgress size="1rem"/>: <Check fontSize="inherit" />}
                                             </IconButton>
-                                        } severity="info">
-                <AlertTitle>Info</AlertTitle>
-                Do you want to save this plan?
-                </Alert>                 
-           </Collapse>
+                                            <IconButton
+                                            aria-label="close"
+                                            color="inherit"
+                                            size="small"
+                                            onClick={()=>setSavePopup(false)}
+                                        >
+                                            <Close fontSize="inherit" />
+                                        </IconButton>
+                                        </>
+                                        }>
+                    Do you want to save your changes?
+                </Alert>
+            </Snackbar>
             
         </ThemeProvider>
     </main>)

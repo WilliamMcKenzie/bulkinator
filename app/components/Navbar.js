@@ -14,14 +14,48 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { Icon, ThemeProvider, createMuiTheme } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Avatar, Icon, ThemeProvider, createMuiTheme } from '@mui/material';
 import logo from '../images/logo.png'
+import axios from 'axios';
 
 const drawerWidth = 240;
 const navItems = ['Home', 'Meals', 'Planner'];
 
 function DrawerAppBar(props) {
 
+    const [username, setUsername] = useState("")
+
+    const fetcher = (url, data) => {
+        return axios.get(url, data).then(res => res.data);
+    };
+
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+
+    useEffect(() => {
+        
+        async function init() {
+            var curUser = await fetcher(`/api/getUser?id=${getCookie("id")}`, false)
+            setUsername(curUser.name)
+        }
+        init()
+
+        return () => { }
+    }, [])
 
     const lightTheme = createMuiTheme({
         palette: {
@@ -70,7 +104,15 @@ function DrawerAppBar(props) {
                                     {item}
                                 </Button>
                             ))}
-                        </Box> : <></>}
+                        </Box> : <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            {navItems.map((item) => (
+                                <Button key={item} sx={{ color: '#fff' }} onClick={() => {
+                                location.href = item == 'Home' ? `/?id=${props.id}` : `/${item.toLowerCase()}?id=${props.id}`
+                                }}>
+                                    {item}
+                                </Button>
+                            ))}
+                        </Box>}
                         <Typography
                             variant="h6"
                             component="div"
@@ -94,15 +136,13 @@ function DrawerAppBar(props) {
                                 }}>
                                     Register
                                 </Button>
-                        </Box> :  <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            {navItems.map((item) => (
-                                <Button key={item} sx={{ color: '#fff' }} onClick={() => {
-                                location.href = item == 'Home' ? `/?id=${props.id}` : `/${item.toLowerCase()}?id=${props.id}`
+                        </Box> :  <><Button sx={{ color: '#fff' }} onClick={() => {
+                                    document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                                    location.href = '/'
                                 }}>
-                                    {item}
+                                    Logout
                                 </Button>
-                            ))}
-                        </Box>}
+                                <Avatar sx={{marginLeft:'5px', width:'30px', height:'30px'}}>{username[0] ? username[0] : "A"}</Avatar></>}
                         
                     </Toolbar>
                 </AppBar>
