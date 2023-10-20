@@ -487,7 +487,7 @@ export default function Home() {
                     alignItems: 'center',
                     justifyContent: 'center'
                 }}>
-                    <Typography variant='h3' sx={{ marginBottom: 'auto', paddingBottom: '5vh', paddingTop: '6rem' }}>
+                    <Typography variant='h3' sx={{ marginBottom: 'auto', paddingBottom: '5vh'}}>
                         What is your diet?
                     </Typography>
                     <Typography variant='subtitle1' sx={{ marginBottom: 'auto', width: '60%', textAlign: 'center', paddingBottom: '5vh' }}>
