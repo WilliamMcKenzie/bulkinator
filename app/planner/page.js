@@ -23,7 +23,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import AddIcon from '@mui/icons-material/Add';
-import { Alert, AlertTitle, Backdrop, Box, Button, ButtonGroup, Checkbox, CircularProgress, Collapse, FormControlLabel, FormGroup, ImageList, ImageListItem, Modal, Paper, Snackbar, ThemeProvider, ToggleButton, ToggleButtonGroup, createMuiTheme } from '@mui/material';
+import { Alert, AlertTitle, Backdrop, Box, Button, ButtonGroup, Checkbox, CircularProgress, Collapse, FormControlLabel, FormGroup, ImageList, ImageListItem, Modal, Paper, Snackbar, ThemeProvider, ToggleButton, ToggleButtonGroup, Tooltip, createMuiTheme } from '@mui/material';
 
 //input 
 import TextField from '@mui/material/TextField';
@@ -623,18 +623,21 @@ export default function Home() {
                                                 defaultValue={curMeal.savedPlan ? breakfastServings[index] : curMeal.isAdded ? 1 : Math.round(calorieChart.breakfast / curMeal.recipe.calories * 100) / 100}
                                             />
                                         </div>
-                                        <Checkbox sx={{marginLeft:'auto'}} color="success" checked={curMeal.checked} onChange={() => {
-                                            if(breakfast[index].checked){
-                                                var temp = [...breakfast]
-                                                temp[index].checked = false
-                                                setBreakfast(temp)
-                                            } else {
-                                                var temp = [...breakfast]
-                                                temp[index].checked = true
-                                                setBreakfast(temp)
-                                            }
-                                            setSavePopup(true)
-                                        }}/>
+                                        <Tooltip title="Completed">
+                                            <Checkbox sx={{marginLeft:'auto'}} color="success" checked={curMeal.checked} onChange={() => {
+                                                if(breakfast[index].checked){
+                                                    var temp = [...breakfast]
+                                                    temp[index].checked = false
+                                                    setBreakfast(temp)
+                                                } else {
+                                                    var temp = [...breakfast]
+                                                    temp[index].checked = true
+                                                    setBreakfast(temp)
+                                                }
+                                                setSavePopup(true)
+                                            }}/>
+                                        </Tooltip>
+                                        
                                         <Delete className={styles.deleteIcon} sx={{ marginLeft: '10px' }} onClick={() => {
                                             var temp = [...breakfast]
                                             temp.splice(index, 1);
@@ -692,6 +695,7 @@ export default function Home() {
                                                 defaultValue={curMeal.savedPlan ? snack1Servings[index] :curMeal.isAdded ? 1 : Math.round(calorieChart.snack1 / curMeal.recipe.calories * 100) / 100}
                                             />
                                         </div>
+                                        <Tooltip title="Completed">
                                         <Checkbox sx={{marginLeft:'auto'}} color="success" checked={curMeal.checked} onChange={() => {
                                             if(snack1[index].checked){
                                                 var temp = [...snack1]
@@ -704,6 +708,7 @@ export default function Home() {
                                             }
                                             setSavePopup(true)
                                         }}/>
+                                        </Tooltip>
                                         <Delete className={styles.deleteIcon} sx={{ marginLeft: '10px' }} onClick={() => {
                                             var temp = [...snack1]
                                             temp.splice(index, 1);
@@ -761,6 +766,7 @@ export default function Home() {
                                                 defaultValue={curMeal.savedPlan ? lunchServings[index] :curMeal.isAdded ? 1 : Math.round(calorieChart.lunch / curMeal.recipe.calories * 100) / 100}
                                             />
                                         </div>
+                                        <Tooltip title="Completed">
                                         <Checkbox sx={{marginLeft:'auto'}} color="success" checked={curMeal.checked} onChange={() => {
                                             if(lunch[index].checked){
                                                 var temp = [...lunch]
@@ -773,6 +779,7 @@ export default function Home() {
                                             }
                                             setSavePopup(true)
                                         }}/>
+                                        </Tooltip>
                                         <Delete className={styles.deleteIcon} sx={{ marginLeft: '10px' }} onClick={() => {
                                             setSavePopup(true)
                                             var temp = [...lunch]
@@ -830,6 +837,7 @@ export default function Home() {
                                                 defaultValue={curMeal.savedPlan ? snack2Servings[index] :curMeal.isAdded ? 1 : Math.round(calorieChart.snack2 / curMeal.recipe.calories * 100) / 100}
                                             />
                                         </div>
+                                        <Tooltip title="Completed">
                                         <Checkbox sx={{marginLeft:'auto'}} color="success" checked={curMeal.checked} onChange={() => {
                                             if(snack2[index].checked){
                                                 var temp = [...snack2]
@@ -842,6 +850,7 @@ export default function Home() {
                                             }
                                             setSavePopup(true)
                                         }}/>
+                                        </Tooltip>
                                         <Delete className={styles.deleteIcon} sx={{ marginLeft: '10px' }} onClick={() => {
                                             var temp = [...snack2]
                                             temp.splice(index, 1);
@@ -899,6 +908,7 @@ export default function Home() {
                                                 defaultValue={curMeal.savedPlan ? dinnerServings[index] : curMeal.isAdded ? 1 : Math.round(calorieChart.dinner / curMeal.recipe.calories * 100) / 100}
                                             />
                                         </div>
+                                        <Tooltip title="Completed">
                                         <Checkbox sx={{marginLeft:'auto'}} color="success" checked={curMeal.checked} onChange={() => {
                                             if(dinner[index].checked){
                                                 var temp = [...dinner]
@@ -911,6 +921,7 @@ export default function Home() {
                                             }
                                             setSavePopup(true)
                                         }}/>
+                                        </Tooltip>
                                         <Delete className={styles.deleteIcon} sx={{ marginLeft: '10px' }} onClick={() => {
                                             var temp = [...dinner]
                                             temp.splice(index, 1);

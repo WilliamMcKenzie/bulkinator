@@ -142,7 +142,7 @@ function DrawerAppBar(props) {
                                 }}>
                                     Logout
                                 </Button>
-                                <Avatar sx={{marginLeft:'5px', width:'30px', height:'30px'}}>{username[0] ? username[0] : "A"}</Avatar></>}
+                                <Avatar sx={{marginLeft:'5px', width:'30px', height:'30px'}}>{username[0] ? username[0].toUpperCase() : "A"}</Avatar></>}
                         
                     </Toolbar>
                 </AppBar>
